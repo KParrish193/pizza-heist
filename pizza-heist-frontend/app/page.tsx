@@ -45,7 +45,7 @@ export default async function Home() {
             src={"/logos/slice-03.svg"}
             alt={"pizza slice logo"}
             width={125}
-            height={150}
+            height={125}
             priority
           />
           {heroContent.map((hero, i: number) => {
@@ -110,10 +110,10 @@ export default async function Home() {
         
         <section className={styles.about}>
           <h2>The Mastermind Behind the Operation</h2>
+          
           {aboutContent.map((copy, i: number) => {
             return (              
                 <div className={styles.aboutContentWrapper} key={i}>
-                    {copy.heading ? <h1>{copy.heading}</h1> : null}
                     {copy.subheading ? <h3>{copy.subheading}</h3> : null}
                     {copy.copy ? <p> {copy.copy}</p> : null}
                 </div>
