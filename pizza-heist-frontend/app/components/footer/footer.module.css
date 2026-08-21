@@ -1,0 +1,36 @@
+.footer {
+  padding: 0.75rem 1.5rem;
+  font-size: 0.65rem;
+}
+
+.footer > div {
+  max-width: var(--fullhd);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.footer .copyright {
+
+}
+
+.hasIcon > a {
+  display: flex;
+  align-items: center;
+}
+
+.hasIcon > a > .icon {
+  display: block;
+  width: 16px;
+  height: 16px;
+}
+
+.hasIcon > a:hover {
+ color: var(--bright-red);
+}
+
+.hasIcon > a:hover > .icon {
+    filter: invert(30%) sepia(70%) saturate(4038%) hue-rotate(344deg) brightness(100%) contrast(118%);
+}

@@ -76,7 +76,7 @@ export async function POST(req: Request) {
   //Step 2: Send email with Resend
   try {
     const { error } = await resend.emails.send({
-      from: `Gourley Tree Removal Site: <${process.env.EMAIL_FROM}>`,
+      from: `Pizza Heist Site: <${process.env.EMAIL_FROM}>`,
       to: `${process.env.EMAIL_TO}`,
       subject: `New Contact Form Submission: ${submissionId}`,
       replyTo: body.email,

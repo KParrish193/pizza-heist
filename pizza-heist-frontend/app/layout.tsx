@@ -24,7 +24,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Gourley Tree Removal LLC",
+  title: "Pizza Heist Jerseys",
   description: ""
 };
 
