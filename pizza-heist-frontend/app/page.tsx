@@ -6,25 +6,29 @@ import styles from "./page.module.css";
 export const revalidate = 0;
 
 export default async function Home() {
-  
   let heroContent: SheetRow[] = [];
+  let ctaContent: SheetRow[] = [];
+  let orderContent: SheetRow[] = [];
+  let orderProcess: SheetRow[] = [];
   let aboutContent: SheetRow[] = [];
-  let services: string[] = [];
-  let location: string[] = [];
 
   try {
-    const heroRows = await fetchSheetData("Home", "A2:F10");
+    const heroRows = await fetchSheetData("Home", "A2:I3");
     heroContent = heroRows;
 
-    const aboutRows = await fetchSheetData("Home", "K2:N10");
+    const ctaRows = await fetchSheetData("Home", "A7:H8");
+    ctaContent = ctaRows;
+
+    const orderRows = await fetchSheetData("Home", "A11:C12");
+    orderContent = orderRows;
+
+    // filter order process data
+    const processRows = await fetchSheetData("Home", "A13:G20");
+    orderProcess = processRows
+
+    const aboutRows = await fetchSheetData("Home", "A23:E29");
     aboutContent = aboutRows;
 
-    // filter services data
-    const servicesRows = await fetchSheetData("Home", "H1:H10");
-    services = servicesRows.map((row) => row["Services"]).filter((s): s is string => Boolean(s));
-
-    const locationRows = await fetchSheetData("Home", "I1:I10");
-    location = locationRows.map((row) => row["Service Location"]).filter((l): l is string => Boolean(l));
   } catch (err: unknown) {
     if (err instanceof Error) {
       console.error("Failed to fetch sheet data:", err.message);
@@ -36,64 +40,86 @@ export default async function Home() {
   return (
     <div className={styles.page}>
       <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>
-            To get started, edit the{" "}
-            <code className={styles.code}>page.tsx</code> file.
-          </h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+        <section className={styles.hero}>
+          <Image
+            src={"/logos/slice-03.svg"}
+            alt={"pizza slice logo"}
+            width={125}
+            height={150}
+            priority
+          />
+          {heroContent.map((hero, i: number) => {
+            return (              
+                <div className={styles.heroWrapper} key={i}>
+                    {hero.heading ? <h1>{hero.heading}</h1> : null}
+                    {hero.subheading ? <h3>{hero.subheading}</h3> : null}
+                    {hero.copy ? <p> {hero.copy}</p> : null}
+                    {hero.copy2 ? <p> {hero.copy2}</p> : null}
+                </div>
+            );
+          })}
+        </section>
+
+        <section className={styles.cta}>
+          {ctaContent.map((cta, i: number) => {
+            return (              
+                <div className={styles.ctaWrapper} key={i}>
+                    {cta.heading ? <h2>{cta.heading}</h2> : null}
+                    {cta.subheading ? <h3>{cta.subheading}</h3> : null}
+                    {cta.copy ? <p> {cta.copy}</p> : null}
+                    {/* link */}
+                    {cta.link && cta.link !== " " ? (
+                      <a className="button-primary" href={cta.link}>
+                        {cta.link_text}
+                      </a>
+                    ) : (
+                      <Link className="button-primary" href={"/"}>
+                      </Link>
+                    )}
+                </div>
+            );
+          })}
+        </section>
+
+        <section>
+          <div className={styles.processCopy}>
+          {orderContent.map((copy, i: number) => {
+            return (              
+                <div className={styles.orderContentWrapper} key={i}>
+                    {copy.heading ? <h2>{copy.heading}</h2> : null}
+                    {copy.subheading ? <h3>{copy.subheading}</h3> : null}
+                    {copy.copy ? <p> {copy.copy}</p> : null}
+                </div>
+            );
+          })} 
+          </div>
+
+          <div className={styles.processListing}>
+            <ul>
+              {orderProcess.map((step, i: number) => {
+                return (
+                  <li key={i}>
+                    <h5>{step.heading} </h5>
+                    <p>{step.copy}</p>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        </section>
+        
+        <section className={styles.about}>
+          <h2>The Mastermind Behind the Operation</h2>
+          {aboutContent.map((copy, i: number) => {
+            return (              
+                <div className={styles.aboutContentWrapper} key={i}>
+                    {copy.heading ? <h1>{copy.heading}</h1> : null}
+                    {copy.subheading ? <h3>{copy.subheading}</h3> : null}
+                    {copy.copy ? <p> {copy.copy}</p> : null}
+                </div>
+            );
+          })} 
+        </section>
       </main>
     </div>
   );

@@ -25,7 +25,7 @@
 }
 
 .success {
-  border: 4px solid var(--tree-poppy); /* green */
+  border: 4px solid var(--poppy-yellow); /* green */
 }
 
 .message {

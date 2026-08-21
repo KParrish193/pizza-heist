@@ -7,17 +7,14 @@ export default function Footer() {
           {/* center */}
           <div className={styles.centerContainer}>
             <div className={styles.hasIcon}>
-                <a
-                    href={"https://www.instagram.com/pizzaheistjerseys/"}
-                    target="_blank"
-                    >
-                    Send a carrier pigeon:
+                <a href={"mailto:agent@pizzaheistjerseys.com"}>
+                    Send an encoded message: 
                     <Image
                         className={styles.icon}
-                        src={"/icons/insta.svg"}
-                        alt={"instagram icon"}
-                        width={28}
-                        height={28}
+                        src={"/icons/mail.svg"}
+                        alt={"mail icon"}
+                        width={20}
+                        height={20}
                     />
                 </a>
             </div>
@@ -30,17 +27,12 @@ export default function Footer() {
                         className={styles.icon}
                         src={"/icons/insta.svg"}
                         alt={"instagram icon"}
-                        width={28}
-                        height={28}
+                        width={20}
+                        height={20}
                     />
                 </a>
             </div>
             <p className={styles.copyright}>&copy;Copyright Pizza Heist 2026</p>
-
-          </div>
-          {/* right */}
-          <div className={styles.socials}>
-
           </div>
       </footer>
     );

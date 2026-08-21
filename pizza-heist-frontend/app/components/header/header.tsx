@@ -21,19 +21,12 @@ export default function Header() {
     
     const handleScroll = () => {
       const currentScrollPos = Math.max(window.scrollY, 0);
-      // background color toggle
-      if (currentScrollPos > window.innerHeight - 80 || noHero) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
-
       if (!headerRef.current) return;
 
       // Only hide if we've scrolled past the initial visible area 
       if (currentScrollPos > hideAfter) { if (currentScrollPos - prevScrollPos > threshold) { 
         // scrolling down past threshold 
-        headerRef.current.style.top = "-105px"; } else if (prevScrollPos - currentScrollPos > threshold) { 
+        headerRef.current.style.top = "-95px"; } else if (prevScrollPos - currentScrollPos > threshold) { 
           // scrolling up past threshold 
           headerRef.current.style.top = "0px"; } } else { 
             // always show if we're near the top 
@@ -55,24 +48,20 @@ export default function Header() {
         {/* logo */}
         <Link href="/" className={styles.logo}>
           <Image
-            src={"/logo/logo.png"}
+            src={"/logos/horizontal-logo.svg"}
             alt={"pizza heist logo"}
-            width={157}
-            height={70}
+            width={100}
+            height={50}
             priority
           />
         </Link>
 
-        {/* cta button */}
-        {/* <Link className={`button-primary arrow-button`} href="/contact-us">
-          Contact Us
-          <Image
-            src={"/icons/arrow.svg"}
-            alt={"arrow"}
-            width={10}
-            height={10}
-          />
-        </Link> */}
+        <div className={styles.searchWrapper}></div>
+        <div className={styles.ctaWrapper}>
+            <a className="button-secondary" href={"/"}>
+                New Teams
+            </a>
+        </div>
       </div>
     </header>
   );
