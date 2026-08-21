@@ -4,8 +4,8 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
-    const sizes = await fetchSheetData("SizeChart", "A1:K9");
-    return NextResponse.json(sizes);
+    const sizeChart = await fetchSheetData("SizeChart", "A1:K9");
+    return NextResponse.json(sizeChart);
   } catch {
     return NextResponse.json(
       { error: "Failed to fetch size chart" },

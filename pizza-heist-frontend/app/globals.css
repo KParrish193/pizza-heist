@@ -1,18 +1,32 @@
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --carbon-black: #242E2F;
+  --carbon-black-60: rgb(36, 46, 47, 0.6);
+  --carbon-black-40: rgb(36, 46, 47, 0.4);
+  --carbon-black-20: rgb(36, 46, 47, 0.2);
+  --deep-red: #C01B1C;
+  --bright-red: #FF2523;
+  --soft-linen: #F2EBDE;
+  --tree-poppy: #F6941D;
+  --white: #FAFAFA;
+  --background: var(--soft-linen);
+  --foreground: var(--carbon-black);
+  --body-text: var(--carbon-black);
+  --heading-text: var(--deep-red);
+  --font-body: var(--font-geist-mono);
+  --font-subheading: var(--font-manic);
+  --font-heading: var(--font-inter);
+  --mobile: 414px;
+  --tablet: 769px;
+  --desktop: 1025px;
+  --fullhd: 1345px;
 }
-
+/* 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: var(--carbon-black);
+    --foreground: var(--soft-linen);
   }
-}
-
-html {
-  height: 100%;
-}
+} */
 
 html,
 body {
@@ -21,14 +35,12 @@ body {
 }
 
 body {
-  min-height: 100%;
-  display: flex;
-  flex-direction: column;
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body), sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  letter-spacing: -1.5px;
 }
 
 * {
@@ -37,13 +49,73 @@ body {
   margin: 0;
 }
 
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-manic);
+  letter-spacing: -1.2px;
+  text-transform: capitalize;
+}
+
 a {
   color: inherit;
   text-decoration: none;
 }
 
-@media (prefers-color-scheme: dark) {
+a:hover {
+  cursor: pointer !important;
+}
+
+/* @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
+  }
+} */
+
+.button-primary {
+  display: block;
+  padding: 0.5rem 2.5rem;
+  border-radius: 1.25rem;
+  background-color: var(--burnt-orange);
+  color: var(--white);
+  font-family: var(--font-inter);
+  letter-spacing: -1.3px;
+  font-weight: 600;
+  font-size: 1rem;
+  max-width: fit-content;
+  border: solid 1.5px var(--accent-orange);
+}
+
+.button-primary:hover {
+  background-color: var(--carbon-black);
+  transition: all 0.2 ease;
+  cursor: pointer;
+  border: solid 1.5px var(--tree-poppy);
+}
+
+.button-secondary {
+  display: block;
+  padding: 0.5rem 1.5rem;
+  border-radius: 1.25rem;
+  background-color: var(--white);
+  color: var(--carbon-black);
+  font-family: var(--font-inter);
+  letter-spacing: -1.3px;
+  font-weight: 600;
+  font-size: 1rem;
+  max-width: fit-content;
+  border: solid 1.5px var(--carbon-black);
+}
+
+.button-secondary:hover {
+  transition: all 0.2 ease;
+  cursor: pointer;
+  border: solid 1.5px var(--burnt-orange);
+  color: var(--burnt-orange);
+}
+
+@media(max-width: 414px){
+  .button-primary,
+  .button-secondary {
+    font-size: 0.85rem;
+    padding: 0.5rem 1.5rem;
   }
 }

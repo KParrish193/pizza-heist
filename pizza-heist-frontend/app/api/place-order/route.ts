@@ -50,7 +50,7 @@ export async function POST(req: Request) {
   // Step 1: Append data to Google Sheets
   try { 
     await sheets.spreadsheets.values.append({
-      spreadsheetId: process.env.GOOGLE_SHEET_ID!,
+      spreadsheetId: process.env.GOOGLE_SHEET_ID_ORDERS!,
       range: "Contact!A:H",
       valueInputOption: "USER_ENTERED",
       requestBody: {

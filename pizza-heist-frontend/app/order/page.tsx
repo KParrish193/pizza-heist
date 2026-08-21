@@ -60,7 +60,7 @@ export default function Contact() {
 
       const filteredData = data
         .map((row) => row["Services"])
-        .filter(Boolean) as string[]; // cast ensures TypeScript knows it’s string[]
+        .filter(Boolean) as string[];
 
       setServices(filteredData);
     }

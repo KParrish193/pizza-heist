@@ -4,7 +4,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: var(--dark-azure-40);
+  background: var(--carbon-black-40);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -25,11 +25,11 @@
 }
 
 .success {
-  border: 4px solid var(--vivid-lime); /* green */
+  border: 4px solid var(--tree-poppy); /* green */
 }
 
 .message {
   margin: 0.5rem 0 1rem;
-  color: var(--dark-azure);
+  color: var(--carbon-black);
   font-size: 0.95rem;
 }

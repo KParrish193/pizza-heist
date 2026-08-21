@@ -8,7 +8,7 @@ export async function GET() {
     return NextResponse.json(options);
   } catch {
     return NextResponse.json(
-      { error: "Failed to fetch jersey styles" },
+      { error: "Failed to fetch jersey options" },
       { status: 500 }
     );
   }
