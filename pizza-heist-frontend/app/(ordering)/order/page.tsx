@@ -12,8 +12,8 @@ interface FormData {
   size: string;
   cut: string;
   length: string;
-  neck: string;
-  back: string;
+  neckStyle: string;
+  backStyle: string;
   color: string;
   jerseyName: string;
   jerseyNumber: string;
@@ -23,8 +23,8 @@ interface FormErrors {
   size: string;
   cut: string;
   length: string;
-  neck: string;
-  back: string;
+  neckStyle: string;
+  backStyle: string;
   color: string;
   jerseyName: string;
   jerseyNumber: string;
@@ -43,8 +43,8 @@ export default function Contact() {
     size: "",
     cut: "",
     length: "",
-    neck: "",
-    back: "",
+    neckStyle: "",
+    backStyle: "",
     color: "",
     jerseyName: "",
     jerseyNumber: "",
@@ -54,8 +54,8 @@ export default function Contact() {
     size: "",
     cut: "",
     length: "",
-    neck: "",
-    back: "",
+    neckStyle: "",
+    backStyle: "",
     color: "",
     jerseyName: "",
     jerseyNumber: "",
@@ -124,7 +124,7 @@ export default function Contact() {
         if(!value.trim()) return "Jersey number cannot be empty";
         if(value.length > 4) return "Jersey number cannot contain more than 4 characters";
       case "jerseyName":
-        if(value.length > 24) return "Jersey name cannot contain more than 24 characters";
+        if(value.length > 36) return "Jersey name cannot contain more than 36 characters";
       default:
         return "";
     }
@@ -135,8 +135,8 @@ export default function Contact() {
       size: validateField("size", formData.size),
       cut: validateField("cut", formData.cut),
       length: validateField("length", formData.length),
-      neck: validateField("neck", formData.neck),
-      back: validateField("back", formData.back),
+      neckStyle: validateField("neck", formData.neckStyle),
+      backStyle: validateField("back", formData.backStyle),
       color: validateField("color", formData.color),
       jerseyName: validateField("jerseyName", formData.jerseyName),
       jerseyNumber: validateField("jerseyNumber", formData.jerseyNumber),
@@ -200,8 +200,8 @@ export default function Contact() {
         size: "",
         cut: "",
         length: "",
-        neck: "",
-        back: "",
+        neckStyle: "",
+        backStyle: "",
         color: "",
         jerseyName: "",
         jerseyNumber: "",
@@ -210,8 +210,8 @@ export default function Contact() {
         size: "",
         cut: "",
         length: "",
-        neck: "",
-        back: "",
+        neckStyle: "",
+        backStyle: "",
         color: "",
         jerseyName: "",
         jerseyNumber: "",
@@ -254,122 +254,46 @@ export default function Contact() {
 
         {/* <Drawer /> */}
 
-        <div className={styles.formWrapper}>
-          <div className={styles.formHeading}>
-            <h1>Customize your jersey</h1>
-            <button >
-              {/* add click handler to open size chart */}
-              Size Chart
-            </button>
+        <div className={styles.formHeading}>
+          <h1>Customize your jersey</h1>
+          <button >
+            {/* add click handler to open size chart */}
+            Size Chart
+          </button>
+        </div>
+
+        <div className={styles.splitWrapper}>
+          <div className={styles.imageWrapper}>
+
           </div>
-
-          <form onSubmit={handleSubmit} noValidate aria-live="assertive">
-            {/* How do I want the UI for adding to cart */}
-            {error && (
-              <Alert
-                heading={"Uh Oh!"}
-                message={error}
-                type="error"
-                onClose={() => setError("")}
-              />
-            )}
-            {success && (
-              <Alert
-                heading={"Thank You!"}
-                message={success}
-                type="success"
-                onClose={() => setSuccess("")}
-              />
-            )}
-
-            <div className={styles.formRow}>
-              <label htmlFor="size">Size</label>
-              <select
-                id="size"
-                name="size"
-                value={formData.size}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                className={styles.select}
-                required
-              >
-                <option value="" disabled>
-                  Select One
-                </option>
-                {sizes.map((size, i: number) => {
-                  return (
-                    <option key={i} value={size}>
-                      {size}
-                    </option>
-                  );
-                })}
-              </select>
-              {formErrors.size && (
-                <span className={styles.error}>{formErrors.size}</span>
+          <div className={styles.formWrapper}>
+            <form onSubmit={handleSubmit} noValidate aria-live="assertive">
+              {/* How do I want the UI for adding to cart */}
+              {error && (
+                <Alert
+                  heading={"Uh Oh!"}
+                  message={error}
+                  type="error"
+                  onClose={() => setError("")}
+                />
               )}
-            </div>
+              {success && (
+                <Alert
+                  heading={"Thank You!"}
+                  message={success}
+                  type="success"
+                  onClose={() => setSuccess("")}
+                />
+              )}
 
-            <div className={styles.formRow}>
-              <fieldset className={styles.fieldset}>
-                <legend>Color</legend>
-                <div className={styles.toggleGroup}>
-                  {colors.map((color, i: number) => {
-                    return (
-                      <label key={i} className={styles.toggleOption}>
-                        <input
-                          type="radio"
-                          name="color"
-                          value={color}
-                          checked={formData.color === color}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          required
-                        />
+{/* display price - how do I want to render this and pass it on to Stripe/Cart*/}
 
-                        <span>{color}</span>
-                      </label>
-                    );
-                  })}
-                </div>
-                {formErrors.color && (
-                  <span className={styles.error}>{formErrors.color}</span>
-                )}
-                </fieldset>
-            </div>
-
-            <div className={styles.formRow}>
-              <fieldset className={styles.fieldset}>
-                <legend>Cut</legend>
-                <div className={styles.toggleGroup}>
-                  {cuts.map((cut, i: number) => {
-                    return (
-                      <label key={i} className={styles.toggleOption}>
-                        <input
-                          type="radio"
-                          name="cut"
-                          value={cut}
-                          checked={formData.cut === cut}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          required
-                        />
-                        <span>{cut}</span>
-                      </label>
-                    );
-                  })}
-                </div>
-                {formErrors.cut && (
-                  <span className={styles.error}>{formErrors.cut}</span>
-                )}
-              </fieldset>
-            </div>
-
-            <div className={styles.formRow}>
-              <label htmlFor="length">Length</label>
+              <div className={styles.formRow}>
+                <label htmlFor="size">Size</label>
                 <select
-                  id="length"
-                  name="length"
-                  value={formData.length}
+                  id="size"
+                  name="size"
+                  value={formData.size}
                   onChange={handleChange}
                   onBlur={handleBlur}
                   className={styles.select}
@@ -378,127 +302,210 @@ export default function Contact() {
                   <option value="" disabled>
                     Select One
                   </option>
-                  {lengths.map((length, i: number) => {
+                  {sizes.map((size, i: number) => {
                     return (
-                      <option key={i} value={length}>
-                        {length}
+                      <option key={i} value={size}>
+                        {size}
                       </option>
                     );
                   })}
                 </select>
-              {formErrors.length && (
-                <span className={styles.error}>{formErrors.length}</span>
-              )}
-            </div>
-            
-              <div className={styles.formRow}>
-                <fieldset className={styles.fieldset}>
-                  <legend>Neck Style</legend>
-                  <div className={styles.toggleGroup}>
-                    {neckStyles.map((neckStyle, i: number) => {
-                      return (
-                        <label key={i} className={styles.toggleOption}>
-                          <input
-                            type="radio"
-                            name="neckStyle"
-                            value={neckStyle}
-                            checked={formData.neck === neckStyle}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            required
-                          />
-                          <span>{neckStyle}</span>
-                        </label>
-                      );
-                    })}
-                  </div>
-
-                  {formErrors.neck && (
-                    <span className={styles.error}>{formErrors.neck}</span>
-                  )}
-                </fieldset>
+                {formErrors.size && (
+                  <span className={styles.error}>{formErrors.size}</span>
+                )}
               </div>
 
               <div className={styles.formRow}>
                 <fieldset className={styles.fieldset}>
-                  <legend>Back Style</legend>
+                  <legend>Color</legend>
                   <div className={styles.toggleGroup}>
-                    {backStyles.map((backStyle, i: number) => {
+                    {colors.map((color, i: number) => {
                       return (
                         <label key={i} className={styles.toggleOption}>
                           <input
                             type="radio"
-                            name="backStyle"
-                            value={backStyle}
-                            checked={formData.back === backStyle}
+                            name="color"
+                            value={color}
+                            checked={formData.color === color}
                             onChange={handleChange}
                             onBlur={handleBlur}
                             required
                           />
 
-                          <span>{backStyle}</span>
+                          <span>{color}</span>
                         </label>
                       );
                     })}
                   </div>
-                  {formErrors.back && (
-                    <span className={styles.error}>{formErrors.back}</span>
+                  {formErrors.color && (
+                    <span className={styles.error}>{formErrors.color}</span>
                   )}
-                </fieldset>
-              </div>
-            
-            <div className={styles.formRow}>
-                <label htmlFor="jerseyNumber">Number</label>
-                <input
-                  id="jerseyNumber"
-                  name="jerseyNumber"
-                  value={formData.jerseyNumber}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  required
-                  placeholder="Number"
-                ></input>
-                {formErrors.jerseyNumber && (
-                  <span className={styles.error}>{formErrors.jerseyNumber}</span>
-                )}
-                <span>Disclaimer:</span>
+                  </fieldset>
               </div>
 
               <div className={styles.formRow}>
-                <label htmlFor="jerseyName">Name on jersey back</label>
-                <input
-                  id="jerseyName"
-                  name="jerseyName"
-                  value={formData.jerseyName}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  required
-                  placeholder="Name"
-                ></input>
-                {formErrors.jerseyName && (
-                  <span className={styles.error}>{formErrors.jerseyName}</span>
-                )}
-                <span>Disclaimer:</span>
+                <fieldset className={styles.fieldset}>
+                  <legend>Cut</legend>
+                  <div className={styles.toggleGroup}>
+                    {cuts.map((cut, i: number) => {
+                      return (
+                        <label key={i} className={styles.toggleOption}>
+                          <input
+                            type="radio"
+                            name="cut"
+                            value={cut}
+                            checked={formData.cut === cut}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            required
+                          />
+                          <span>{cut}</span>
+                        </label>
+                      );
+                    })}
+                  </div>
+                  {formErrors.cut && (
+                    <span className={styles.error}>{formErrors.cut}</span>
+                  )}
+                </fieldset>
               </div>
 
-
-            <div className={styles.buttonRow}>
-              <button
-                type="submit"
-                disabled={isSubmitDisabled}
-                className="button-primary arrow-button"
-              >
-                {submitting ? (
-                  "Sending..."
-                ) : (
-                //   this button needs to push the jersey order details to the cart
-                  <>
-                    Add to Cart
-                  </>
+              <div className={styles.formRow}>
+                <label htmlFor="length">Length</label>
+                  <select
+                    id="length"
+                    name="length"
+                    value={formData.length}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    className={styles.select}
+                    required
+                  >
+                    <option value="" disabled>
+                      Select One
+                    </option>
+                    {lengths.map((length, i: number) => {
+                      return (
+                        <option key={i} value={length}>
+                          {length}
+                        </option>
+                      );
+                    })}
+                  </select>
+                {formErrors.length && (
+                  <span className={styles.error}>{formErrors.length}</span>
                 )}
-              </button>
-            </div>
-          </form>
+              </div>
+              
+                <div className={styles.formRow}>
+                  <fieldset className={styles.fieldset}>
+                    <legend>Neck Style</legend>
+                    <div className={styles.toggleGroup}>
+                      {neckStyles.map((neckStyle, i: number) => {
+                        return (
+                          <label key={i} className={styles.toggleOption}>
+                            <input
+                              type="radio"
+                              name="neckStyle"
+                              value={neckStyle}
+                              checked={formData.neckStyle === neckStyle}
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                              required
+                            />
+                            <span>{neckStyle}</span>
+                          </label>
+                        );
+                      })}
+                    </div>
+
+                    {formErrors.neckStyle && (
+                      <span className={styles.error}>{formErrors.neckStyle}</span>
+                    )}
+                  </fieldset>
+                </div>
+
+                <div className={styles.formRow}>
+                  <fieldset className={styles.fieldset}>
+                    <legend>Back Style</legend>
+                    <div className={styles.toggleGroup}>
+                      {backStyles.map((backStyle, i: number) => {
+                        return (
+                          <label key={i} className={styles.toggleOption}>
+                            <input
+                              type="radio"
+                              name="backStyle"
+                              value={backStyle}
+                              checked={formData.backStyle === backStyle}
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                              required
+                            />
+
+                            <span>{backStyle}</span>
+                          </label>
+                        );
+                      })}
+                    </div>
+                    {formErrors.backStyle && (
+                      <span className={styles.error}>{formErrors.backStyle}</span>
+                    )}
+                  </fieldset>
+                </div>
+              
+              <div className={styles.formRow}>
+                  <label htmlFor="jerseyNumber">Jersey Number</label>
+                  <input
+                    id="jerseyNumber"
+                    name="jerseyNumber"
+                    value={formData.jerseyNumber}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    required
+                    placeholder="Number"
+                  ></input>
+                  {formErrors.jerseyNumber && (
+                    <span className={styles.error}>{formErrors.jerseyNumber}</span>
+                  )}
+                  <span className={styles.disclaimer}>Enter text here EXACTLY as you want your number to appear on the jersey. Any text in this field will be printed as written. Please do not include extra characters unless you wish these to be printed on your jersey.</span>
+                </div>
+
+                <div className={styles.formRow}>
+                  <label htmlFor="jerseyName">Name on jersey Back</label>
+                  <input
+                    id="jerseyName"
+                    name="jerseyName"
+                    value={formData.jerseyName}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    required
+                    placeholder="Name"
+                  ></input>
+                  {formErrors.jerseyName && (
+                    <span className={styles.error}>{formErrors.jerseyName}</span>
+                  )}
+                  <span className={styles.disclaimer}>Enter text here EXACTLY as you want the name to appear on the jersey, or leave blank for no name. Any text in this field will be printed as written. Please do not include extra characters unless you wish these to be printed on your jersey.</span>
+                </div>
+
+
+              <div className={styles.buttonRow}>
+                <button
+                  type="submit"
+                  disabled={isSubmitDisabled}
+                  className="button-primary arrow-button"
+                >
+                  {submitting ? (
+                    "Sending..."
+                  ) : (
+                  //   this button needs to push the jersey order details to the cart
+                    <>
+                      Add to Cart
+                    </>
+                  )}
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       </main>
     </div>
