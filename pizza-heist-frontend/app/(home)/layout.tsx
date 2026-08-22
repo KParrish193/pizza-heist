@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import { Inter, Geist_Mono } from "next/font/google";
 import localFont from 'next/font/local'
 
-import "./globals.css";
-import Header from "./components/header/header";
-import Footer from "./components/footer/footer";
+import "../globals.css";
+import Header from "../components/header/header";
+import Footer from "../components/footer/footer";
 
 const manic = localFont({
-  src: './MANIC-Regular.woff2',
+  src: '../MANIC-Regular.woff2',
   variable: "--font-manic",
 })
 

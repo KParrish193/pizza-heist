@@ -32,7 +32,7 @@ export default function Footer() {
                     />
                 </a>
             </div>
-            <p className={styles.copyright}>&copy;Copyright Pizza Heist 2026</p>
+            <p className={styles.copyright}>&copy;Copyright Pizza Heist Jersey Co., 2026</p>
           </div>
       </footer>
     );

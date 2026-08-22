@@ -70,7 +70,6 @@
   margin: 0.5rem 0 0;
 }
 
-
 /* order process section */
 .processCopy h2 {
   margin-bottom: -12px;
@@ -88,10 +87,6 @@
   padding: 0.4rem 0;
   border-bottom: solid 1px var(--poppy-yellow);
 }
-
-/* .processListing li:last-of-type {
-  border: none;
-} */
 
 .processListing li > h5 {
   color: var(--deep-red);

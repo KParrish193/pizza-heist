@@ -110,7 +110,7 @@ export default async function Home() {
         
         <section className={styles.about}>
           <h2>The Mastermind Behind the Operation</h2>
-          
+
           {aboutContent.map((copy, i: number) => {
             return (              
                 <div className={styles.aboutContentWrapper} key={i}>

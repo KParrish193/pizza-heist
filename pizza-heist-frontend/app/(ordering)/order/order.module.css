@@ -1,0 +1,90 @@
+.page {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-geist-sans);
+  min-height: calc(100vh - 62px);
+}
+
+.main {
+  display: flex;
+  flex: 1;
+  width: 100%;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 64px;
+  position: relative;
+}
+
+.headerWrapper {
+    position: absolute;
+    top: 0px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    width: 100%;
+    max-width: var(--fullhd);
+    max-height: 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 64px;
+}
+
+.headerWrapper button, 
+.formHeading button {
+    border: none;
+    background:transparent;
+}
+
+.headerWrapper button {
+    width: 48px;
+    height: 48px;
+    display: block;
+    margin-right: -14px;
+}
+
+.formWrapper {
+    border: solid 2px fuchsia;
+}
+
+.formHeading {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.formHeading h1 {
+    margin-bottom: -8px;
+}
+
+.formHeading button {
+    color: var(--deep-red);
+    font-size: 0.65rem;
+    font-family: var(--font-geist-sans);
+    text-decoration: underline;
+    font-weight: 600;
+    text-underline-offset: 1px;
+    text-transform: uppercase;
+}
+
+.formWrapper > form {
+    border: solid 2px pink;
+}
+
+
+.formRow {
+    border: solid 2px lime;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.formRow > label,
+.formRow legend {
+    font-family: var(--font-manic);
+    color: var(--deep-red);
+    font-size: 1.2rem;
+}
