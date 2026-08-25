@@ -62,7 +62,7 @@ export default function jerseyOrder() {
   const [backStyles, setBackStyles] = useState<string[]>([]);
   const [colors, setColors] = useState<string[]>([]);
   const [price, setPrice] = useState<number>(0);
-  const [discounts, setDiscounts] = useState<Discounts>({reg: 0, percent: 0, salePrice: 0, type: ""})
+  const [discounts, setDiscounts] = useState<Discounts>({reg: 0, percent: 0, salePrice: 0, type: ""});
 
   // initiate form state
   const [formData, setFormData] = useState<FormData>({
@@ -118,18 +118,24 @@ export default function jerseyOrder() {
 
       // find discount or sale price
       var calculatedPrice = 0
-      if(sheetDiscountPercentage.length > 0 && sheetSalePrice.length > 0){
-        const salePercentageCalc = sheetSalePrice * (1 - sheetDiscountPercentage / 100);
-        calculatedPrice = Math.round(salePercentageCalc * 100) / 100
-        setDiscounts({reg: sheetPrice, percent: sheetDiscountPercentage, salePrice: sheetSalePrice, type: discountType[0]});
-      }
-      else if(sheetDiscountPercentage.length > 0){
+
+      // fallback if both dicounts are applied?
+      // if(sheetDiscountPercentage.length > 0 && sheetSalePrice.length > 0){
+      //   const salePercentageCalc = sheetSalePrice * (1 - sheetDiscountPercentage / 100);
+      //   calculatedPrice = Math.round(salePercentageCalc * 100) / 100
+      //   setDiscounts({reg: sheetPrice, percent: sheetDiscountPercentage, salePrice: sheetSalePrice, type: discountType[0]});
+      // } else 
+
+      if(sheetDiscountPercentage.length > 0){
         const percentageCalc = sheetPrice * (1 - sheetDiscountPercentage / 100);
         calculatedPrice = Math.round(percentageCalc * 100) / 100;
         setDiscounts({reg: sheetPrice, percent: sheetDiscountPercentage, salePrice: 0, type: discountType[0]});
       } else if(sheetSalePrice.length > 0){
         calculatedPrice = Math.round(sheetSalePrice * 100) / 100
         setDiscounts({reg: sheetPrice, percent: 0, salePrice: sheetSalePrice, type: discountType[0]});
+      } else {
+        calculatedPrice = sheetPrice;
+        setDiscounts({reg: sheetPrice, percent: 0, salePrice: 0, type: ""})
       }
       setPrice(calculatedPrice);
       
@@ -164,12 +170,9 @@ export default function jerseyOrder() {
       setBackStyles(filteredBack);
       setColors(filteredColors);
 
-
     }
     loadOptions();
   }, []);
-
-  console.log("order 121:", sizes, price);
 
   const validateField = (name: string, value: string) => {
     switch (name) {
@@ -294,6 +297,90 @@ export default function jerseyOrder() {
   // Disable submit during submit
   const isSubmitDisabled = submitting
 
+  const visualLengthMap: Record<string, Record<string, string>> = {
+    "Full Back": {
+      "Baby": "baby crop",
+      "Regular": "regular",
+      "Short": "short",
+    },
+
+    "High Neck": {
+      "Crop": "crop",
+      "Regular": "regular",
+    },
+
+    "Racer Back": {
+      "Crop": "crop",
+      "Long": "long",
+      "Regular": "regular",
+    },
+
+    "Scoop Neck": {
+      "Baby Crop": "baby crop",
+      "Long": "long",
+      "Regular": "regular",
+      "Short": "short",
+    },
+  };
+
+const lengthPriority: Record<string, string[]> = {
+  "Baby Crop": ["Baby Crop", "Crop", "Short", "Regular", "Long"],
+  "Crop": ["Crop", "Baby Crop", "Short", "Regular", "Long"],
+  "Regular": ["Regular", "Short", "Long", "Crop", "Baby Crop"],
+  "Short": ["Short", "Crop", "Baby Crop", "Regular", "Long"],
+  "Long": ["Long", "Regular", "Short", "Crop", "Baby Crop"],
+};
+
+const getClosestVisualLength = (
+  back: string,
+  requestedLength: string
+) => {
+  const availableLengths = visualLengthMap[back];
+
+  if (!availableLengths) {
+    return "regular";
+  }
+
+  const priorities = lengthPriority[requestedLength] || ["Regular"];
+  const closestLength = priorities.find(
+    (length) => availableLengths[length]
+  );
+
+  return availableLengths[closestLength || "Regular"] || "regular";
+};
+
+const getFrontImage = () => {
+  const cut = formData.cut || "Fitted";
+  const neck = formData.neckStyle || "Scoop Neck";
+  const length = formData.length || "Regular";
+
+  const visualLength = getClosestVisualLength(neck, length);
+
+  return `/drawings/${cut.toLowerCase()}/${neck.toLowerCase()}/${visualLength}.svg`;
+};
+
+const getBackImage = () => {
+  const cut = formData.cut || "Fitted";
+  const back = formData.backStyle || "Full Back";
+  const length = formData.length || "Regular";
+
+  const visualLength = getClosestVisualLength(back, length);
+
+  return `/drawings/${cut.toLowerCase()}/${back.toLowerCase()}/${visualLength}.svg`;
+};
+
+  const frontImage = getFrontImage();
+  const backImage = getBackImage();
+  
+  console.log({
+    cut: formData.cut,
+    length: formData.length,
+    neck: formData.neckStyle,
+    back: formData.backStyle,
+    frontImage,
+    backImage,
+  });
+
   return (
     <div className={styles.page}>
       <main className={styles.main}>
@@ -332,7 +419,24 @@ export default function jerseyOrder() {
 
         <div className={styles.splitWrapper}>
           <div className={styles.imageWrapper}>
-
+            <div>
+              <label>Front</label>
+              <Image
+                src={frontImage}
+                alt={`image of jersey style ${frontImage}`}
+                width={125}
+                height={125}
+              />
+            </div>
+            <div>
+              <label>Back</label>
+              <Image
+                src={backImage}
+                alt={`image of jersey style ${backImage}`}
+                width={125}
+                height={125}
+              />
+            </div>
           </div>
 
           <div className={styles.formWrapper}>
@@ -357,10 +461,22 @@ export default function jerseyOrder() {
 
               {/* display price */}
               <div className={`${styles.formRow} ${styles.priceRow}`}>
-                <label>Price</label>
                 {/* next iteration: calculate conversion for international */}
-                <p>{discounts.percent}%</p>
-                <p>${price}</p>
+                {discounts.percent !== 0 || discounts.salePrice !== 0 ?
+                <div className={styles.salePrice}>
+                  <p className={styles.strikethrough}>${discounts.reg}</p>
+                  {discounts.percent !== 0 ?
+                  <p>-{discounts.percent}%
+                    <span className={styles.disclaimer}>{discounts.type}</span>
+                  </p> : 
+                  <p>{discounts.salePrice}
+                    <span className={styles.disclaimer}>{discounts.type}</span>
+                  </p>}
+                  <p className={styles.finalPrice}>${price} USD</p>
+                </div> : 
+                <div className={styles.regularPrice}>
+                  <p>${discounts.reg} USD</p>
+                </div>}
                 <span className={styles.disclaimer}>Tax and Shipping calculated at Checkout</span>
               </div>
               <div className={styles.formRow}>

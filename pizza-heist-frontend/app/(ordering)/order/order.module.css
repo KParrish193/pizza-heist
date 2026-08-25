@@ -82,10 +82,14 @@
     display: flex;
 }
 
-.imageWrapper,
+.imageWrapper {
+    min-width: 60%;
+    max-width: 60%;
+}
+
 .formWrapper {
-    min-width: 50%;
-    max-width: 50%;
+    min-width: 40%;
+    max-width: 40%;
 }
 
 .formWrapper > form {
@@ -102,15 +106,35 @@
 }
 
 .formRow.priceRow {
-    border: solid 2px blue;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
+    flex-direction: column;
 }
 
-.formRow.priceRow > p {
-    margin-left: 16px;
+.formRow.priceRow .salePrice {
+    width: 50%;
+
+}
+
+.formRow.priceRow .salePrice p:nth-of-type(2){
+    color: var(--bright-red);
+}
+
+.formRow.priceRow .salePrice span {
+    color: var(--bright-red);
+    margin-left: 8px;
+}
+
+.formRow.priceRow .salePrice .strikethrough {
+    text-decoration: line-through;
+    font-size: 1.1rem;
+    color: var(--carbon-black-60);
+}
+
+.formRow.priceRow .finalPrice,
+.formRow.priceRow .regularPrice {
+    font-size: 1.1rem;
     font-weight: 600;
+    font-family: var(--font-inter);
+    margin: 8px 0 -8px;
 }
 
 .formRow > label,
@@ -132,7 +156,7 @@
 
 .formRow input:focus,
 .formRow select:focus {
-    outline-color: var(--bright-red);
+    outline-color: var(--poppy-yellow);
     outline-offset: 4px;    
 }
 
