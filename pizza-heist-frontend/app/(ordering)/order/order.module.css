@@ -101,6 +101,18 @@
     justify-content: space-between;
 }
 
+.formRow.priceRow {
+    border: solid 2px blue;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.formRow.priceRow > p {
+    margin-left: 16px;
+    font-weight: 600;
+}
+
 .formRow > label,
 .formRow legend {
     font-family: var(--font-manic);

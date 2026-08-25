@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
-    const options = await fetchSheetData("JerseyOptions", "A1:F12");
+    const options = await fetchSheetData("JerseyOptions", "A1:K12");
     return NextResponse.json(options);
   } catch {
     return NextResponse.json(

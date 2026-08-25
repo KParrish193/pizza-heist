@@ -17,6 +17,7 @@ interface FormData {
   color: string;
   jerseyName: string;
   jerseyNumber: string;
+  pronouns: string;
 };
 
 interface FormErrors {
@@ -28,15 +29,40 @@ interface FormErrors {
   color: string;
   jerseyName: string;
   jerseyNumber: string;
+  pronouns: string;
 }
 
-export default function Contact() {
+interface Discounts {
+  reg: number;
+  percent: number;
+  salePrice: number;
+  type: string;
+}
+
+interface CartItem {
+  id: string;
+  price: number;
+  size: string;
+  cut: string;
+  length: string;
+  neckStyle: string;
+  backStyle: string;
+  color: string;
+  jerseyName: string;
+  jerseyNumber: string;
+  pronouns: string;
+  quantity: number;
+}
+
+export default function jerseyOrder() {
   const [sizes, setSizes] = useState<string[]>([]);
   const [cuts, setCuts] = useState<string[]>([]);
   const [lengths, setLengths] = useState<string[]>([]);
   const [neckStyles, setNeckStyles] = useState<string[]>([]);
   const [backStyles, setBackStyles] = useState<string[]>([]);
   const [colors, setColors] = useState<string[]>([]);
+  const [price, setPrice] = useState<number>(0);
+  const [discounts, setDiscounts] = useState<Discounts>({reg: 0, percent: 0, salePrice: 0, type: ""})
 
   // initiate form state
   const [formData, setFormData] = useState<FormData>({
@@ -48,6 +74,7 @@ export default function Contact() {
     color: "",
     jerseyName: "",
     jerseyNumber: "",
+    pronouns: ""
   });
 
   const [formErrors, setFormErrors] = useState<FormErrors>({
@@ -59,6 +86,7 @@ export default function Contact() {
     color: "",
     jerseyName: "",
     jerseyNumber: "",
+    pronouns: ""
   });
 
   const [submitting, setSubmitting] = useState(false);
@@ -66,12 +94,45 @@ export default function Contact() {
   const [success, setSuccess] = useState("");
   const [touched, setTouched] = useState<{ [key: string]: boolean }>({});
 
-  // set  dropdowns dynamically
+  // set  dropdowns dynamically, import price from sheet
   useEffect(() => {
     async function loadOptions() {
       const res = await fetch("/api/jersey-options");
       const data: Record<string, string>[] = await res.json();
 
+      const sheetPrice = data
+        .map((row) => row["Price"])
+        .filter(Boolean) as any;
+
+      const sheetDiscountPercentage = data
+        .map((row) => row["Discount Amount"])
+        .filter(Boolean) as any;
+
+      const sheetSalePrice = data
+        .map((row) => row["Sale Price"])
+        .filter(Boolean) as any;
+      
+      const discountType = data
+        .map((row) => row["Discount Type"])
+        .filter(Boolean) as string[];
+
+      // find discount or sale price
+      var calculatedPrice = 0
+      if(sheetDiscountPercentage.length > 0 && sheetSalePrice.length > 0){
+        const salePercentageCalc = sheetSalePrice * (1 - sheetDiscountPercentage / 100);
+        calculatedPrice = Math.round(salePercentageCalc * 100) / 100
+        setDiscounts({reg: sheetPrice, percent: sheetDiscountPercentage, salePrice: sheetSalePrice, type: discountType[0]});
+      }
+      else if(sheetDiscountPercentage.length > 0){
+        const percentageCalc = sheetPrice * (1 - sheetDiscountPercentage / 100);
+        calculatedPrice = Math.round(percentageCalc * 100) / 100;
+        setDiscounts({reg: sheetPrice, percent: sheetDiscountPercentage, salePrice: 0, type: discountType[0]});
+      } else if(sheetSalePrice.length > 0){
+        calculatedPrice = Math.round(sheetSalePrice * 100) / 100
+        setDiscounts({reg: sheetPrice, percent: 0, salePrice: sheetSalePrice, type: discountType[0]});
+      }
+      setPrice(calculatedPrice);
+      
       const filteredSizes = data
         .map((row) => row["Size"])
         .filter(Boolean) as string[];
@@ -101,10 +162,14 @@ export default function Contact() {
       setLengths(filteredLengths);
       setNeckStyles(filteredNeck);
       setBackStyles(filteredBack);
-      setColors(filteredColors)
+      setColors(filteredColors);
+
+
     }
     loadOptions();
   }, []);
+
+  console.log("order 121:", sizes, price);
 
   const validateField = (name: string, value: string) => {
     switch (name) {
@@ -140,6 +205,7 @@ export default function Contact() {
       color: validateField("color", formData.color),
       jerseyName: validateField("jerseyName", formData.jerseyName),
       jerseyNumber: validateField("jerseyNumber", formData.jerseyNumber),
+      pronouns: validateField("pronouns", formData.pronouns)
     };
     setFormErrors(newErrors);
     return Object.values(newErrors).every((err) => !err);
@@ -205,6 +271,7 @@ export default function Contact() {
         color: "",
         jerseyName: "",
         jerseyNumber: "",
+        pronouns: "",
       });
       setFormErrors({
         size: "",
@@ -215,6 +282,7 @@ export default function Contact() {
         color: "",
         jerseyName: "",
         jerseyNumber: "",
+        pronouns: "",
       });
     } catch (err) {
       setError(`Something went wrong. ${err}. Please try again.`);
@@ -266,6 +334,7 @@ export default function Contact() {
           <div className={styles.imageWrapper}>
 
           </div>
+
           <div className={styles.formWrapper}>
             <form onSubmit={handleSubmit} noValidate aria-live="assertive">
               {/* How do I want the UI for adding to cart */}
@@ -286,8 +355,14 @@ export default function Contact() {
                 />
               )}
 
-{/* display price - how do I want to render this and pass it on to Stripe/Cart*/}
-
+              {/* display price */}
+              <div className={`${styles.formRow} ${styles.priceRow}`}>
+                <label>Price</label>
+                {/* next iteration: calculate conversion for international */}
+                <p>{discounts.percent}%</p>
+                <p>${price}</p>
+                <span className={styles.disclaimer}>Tax and Shipping calculated at Checkout</span>
+              </div>
               <div className={styles.formRow}>
                 <label htmlFor="size">Size</label>
                 <select
@@ -485,6 +560,22 @@ export default function Contact() {
                     <span className={styles.error}>{formErrors.jerseyName}</span>
                   )}
                   <span className={styles.disclaimer}>Enter text here EXACTLY as you want the name to appear on the jersey, or leave blank for no name. Any text in this field will be printed as written. Please do not include extra characters unless you wish these to be printed on your jersey.</span>
+                </div>
+                <div className={styles.formRow}>
+                  <label htmlFor="pronouns">Pronouns</label>
+                  <input
+                    id="pronouns"
+                    name="pronouns"
+                    value={formData.pronouns}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    required
+                    placeholder="Pronouns (i.e. she/her, they/them, etc.)"
+                  ></input>
+                  {formErrors.pronouns && (
+                    <span className={styles.error}>{formErrors.pronouns}</span>
+                  )}
+                  <span className={styles.disclaimer}>Enter text here EXACTLY as you want it to appear on the jersey, or leave blank for no pronouns. Any text in this field will be printed as written. Please do not include extra characters unless you wish these to be printed on your jersey.</span>
                 </div>
 
 
