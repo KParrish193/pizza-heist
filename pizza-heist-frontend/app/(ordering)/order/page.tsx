@@ -5,6 +5,7 @@ import Link from "next/link";
 import Alert from '../../components/ux/alert/alert';
 // import drawer
 // import cart
+import SizeChart from "../../components/size-chart/SizeChart";
 import { useState, useEffect } from "react";
 import styles from "./order.module.css";
 
@@ -63,6 +64,7 @@ export default function jerseyOrder() {
   const [colors, setColors] = useState<string[]>([]);
   const [price, setPrice] = useState<number>(0);
   const [discounts, setDiscounts] = useState<Discounts>({reg: 0, percent: 0, salePrice: 0, type: ""});
+  const [showSizeChart, setShowSizeChart] = useState(false);
 
   // initiate form state
   const [formData, setFormData] = useState<FormData>({
@@ -297,6 +299,8 @@ export default function jerseyOrder() {
   // Disable submit during submit
   const isSubmitDisabled = submitting
 
+
+  // Functions and controls for form selections controlling display image
   const visualLengthMap: Record<string, Record<string, string>> = {
     "Full Back": {
       "Baby": "baby crop",
@@ -323,64 +327,55 @@ export default function jerseyOrder() {
     },
   };
 
-const lengthPriority: Record<string, string[]> = {
-  "Baby Crop": ["Baby Crop", "Crop", "Short", "Regular", "Long"],
-  "Crop": ["Crop", "Baby Crop", "Short", "Regular", "Long"],
-  "Regular": ["Regular", "Short", "Long", "Crop", "Baby Crop"],
-  "Short": ["Short", "Crop", "Baby Crop", "Regular", "Long"],
-  "Long": ["Long", "Regular", "Short", "Crop", "Baby Crop"],
-};
+  const lengthPriority: Record<string, string[]> = {
+    "Baby Crop": ["Baby Crop", "Crop", "Short", "Regular", "Long"],
+    "Crop": ["Crop", "Baby Crop", "Short", "Regular", "Long"],
+    "Regular": ["Regular", "Short", "Long", "Crop", "Baby Crop"],
+    "Short": ["Short", "Crop", "Baby Crop", "Regular", "Long"],
+    "Long": ["Long", "Regular", "Short", "Crop", "Baby Crop"],
+  };
 
-const getClosestVisualLength = (
-  back: string,
-  requestedLength: string
-) => {
-  const availableLengths = visualLengthMap[back];
+  const getClosestVisualLength = (
+    back: string,
+    requestedLength: string
+  ) => {
+    const availableLengths = visualLengthMap[back];
 
-  if (!availableLengths) {
-    return "regular";
-  }
+    if (!availableLengths) {
+      return "regular";
+    }
 
-  const priorities = lengthPriority[requestedLength] || ["Regular"];
-  const closestLength = priorities.find(
-    (length) => availableLengths[length]
-  );
+    const priorities = lengthPriority[requestedLength] || ["Regular"];
+    const closestLength = priorities.find(
+      (length) => availableLengths[length]
+    );
 
-  return availableLengths[closestLength || "Regular"] || "regular";
-};
+    return availableLengths[closestLength || "Regular"] || "regular";
+  };
 
-const getFrontImage = () => {
-  const cut = formData.cut || "Fitted";
-  const neck = formData.neckStyle || "Scoop Neck";
-  const length = formData.length || "Regular";
+  const getFrontImage = () => {
+    const cut = formData.cut || "Fitted";
+    const neck = formData.neckStyle || "High Neck";
+    const length = formData.length || "Regular";
 
-  const visualLength = getClosestVisualLength(neck, length);
+    const visualLength = getClosestVisualLength(neck, length);
 
-  return `/drawings/${cut.toLowerCase()}/${neck.toLowerCase()}/${visualLength}.svg`;
-};
+    return `/drawings/${cut.toLowerCase()}/${neck.toLowerCase()}/${visualLength}.svg`;
+  };
 
-const getBackImage = () => {
-  const cut = formData.cut || "Fitted";
-  const back = formData.backStyle || "Full Back";
-  const length = formData.length || "Regular";
+  const getBackImage = () => {
+    const cut = formData.cut || "Fitted";
+    const back = formData.backStyle || "Full Back";
+    const length = formData.length || "Regular";
 
-  const visualLength = getClosestVisualLength(back, length);
+    const visualLength = getClosestVisualLength(back, length);
 
-  return `/drawings/${cut.toLowerCase()}/${back.toLowerCase()}/${visualLength}.svg`;
-};
+    return `/drawings/${cut.toLowerCase()}/${back.toLowerCase()}/${visualLength}.svg`;
+  };
 
   const frontImage = getFrontImage();
   const backImage = getBackImage();
   
-  console.log({
-    cut: formData.cut,
-    length: formData.length,
-    neck: formData.neckStyle,
-    back: formData.backStyle,
-    frontImage,
-    backImage,
-  });
-
   return (
     <div className={styles.page}>
       <main className={styles.main}>
@@ -411,11 +406,18 @@ const getBackImage = () => {
 
         <div className={styles.formHeading}>
           <h1>Customize your jersey</h1>
-          <button >
-            {/* add click handler to open size chart */}
+          <button     
+            type="button"
+            onClick={() => setShowSizeChart(true)}
+            className={styles.sizeChartbtn}>
             Size Chart
           </button>
         </div>
+        
+        <SizeChart
+          isOpen={showSizeChart}
+          onClose={() => setShowSizeChart(false)}
+        />
 
         <div className={styles.splitWrapper}>
           <div className={styles.imageWrapper}>
@@ -424,8 +426,8 @@ const getBackImage = () => {
               <Image
                 src={frontImage}
                 alt={`image of jersey style ${frontImage}`}
-                width={125}
-                height={125}
+                width={250}
+                height={250}
               />
             </div>
             <div>
@@ -433,8 +435,8 @@ const getBackImage = () => {
               <Image
                 src={backImage}
                 alt={`image of jersey style ${backImage}`}
-                width={125}
-                height={125}
+                width={250}
+                height={250}
               />
             </div>
           </div>

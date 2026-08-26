@@ -1,0 +1,139 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.modal {
+  width: fit-content;
+  max-width: 700px;
+  max-height: 90vh;
+  background: var(--white);
+  border-radius: 6px;
+}
+
+.header {
+    position: relative;
+    width: 100%;
+    padding: 18px 18px 8px 18px;
+    border-bottom: solid 1px var(--carbon-black-20);
+}
+
+.header h2 {
+    margin: 0 auto;
+    font-size: 1.8rem;
+    line-height: 1;
+    text-align: center;
+}
+
+.disclaimer {
+    font-size: 0.4rem;
+    color: var(--carbon-black-60);
+    font-weight: 600;
+    letter-spacing: 0.7px;
+    margin: 0 auto;
+    display: block;
+    text-transform: uppercase;
+    width: fit-content;
+}
+
+.closeBtn {
+    border: solid 1.5px var(--poppy-yellow);
+    background-color: var(--poppy-yellow-18);
+    height: 28px;
+    width: 28px;
+    border-radius: 50%;
+    position: absolute;
+    right: 18px;
+    top: 12px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px var(--carbon-black-20);
+}
+
+.closeBtn::after,
+.closeBtn::before {
+ content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12px;
+  height: 1.5px;
+  background-color: var(--carbon-black);
+  border-radius: 2px;
+}
+
+.closeBtn::before {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.closeBtn::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.content {
+  padding: 4px 18px 18px;
+  overflow-x: auto;
+}
+
+.content table {
+  /* width: 100%; */
+  margin: 0 auto;
+  border-collapse: collapse;
+  font-family: var(--font-geist-mono);
+}
+
+.content th,
+.content td {
+  padding: 8px;
+  text-align: center;
+}
+
+.content th {
+  font-weight: 600;
+  font-size: 0.6rem;
+}
+
+.content .headingColumn {
+    border: none;
+    border-right: 1px solid #ddd;
+    text-align: right;
+    max-width: fit-content;
+    padding-left: 0;
+}
+
+.content .sizeLabel {
+    border-bottom: 1px solid #ddd;
+}
+
+.content .lengthLabel {
+    border-bottom: 1px solid #ddd;
+    padding-right: 68px;
+}
+
+.content td {
+  font-size: 0.6rem;
+  border-bottom: 1px solid #ddd;
+}
+
+.content td:nth-child(odd) {
+  background: var(--poppy-yellow-18);
+}
+
+@media (max-width: 600px) {
+  .overlay {
+    padding: 12px;
+  }
+
+  .modal {
+    max-height: 95vh;
+  }
+
+  .content {
+    padding: 16px;
+  }
+}
