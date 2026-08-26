@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import Alert from '../../components/ux/alert/alert';
-// import drawer
+import Drawer from "@/app/components/ux/drawer/drawer";
 // import cart
 import SizeChart from "../../components/size-chart/SizeChart";
 import { useState, useEffect } from "react";
@@ -65,8 +65,11 @@ export default function jerseyOrder() {
   const [quantity, setQuantity] = useState(1);
   const [price, setPrice] = useState<number>(0);
   const [discounts, setDiscounts] = useState<Discounts>({reg: 0, percent: 0, salePrice: 0, type: ""});
+  
+  // ux state 
   const [showSizeChart, setShowSizeChart] = useState(false);
-
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  
   // initiate form state
   const [formData, setFormData] = useState<FormData>({
     size: "",
@@ -122,12 +125,7 @@ export default function jerseyOrder() {
       // find discount or sale price
       var calculatedPrice = 0
 
-      // fallback if both dicounts are applied?
-      // if(sheetDiscountPercentage.length > 0 && sheetSalePrice.length > 0){
-      //   const salePercentageCalc = sheetSalePrice * (1 - sheetDiscountPercentage / 100);
-      //   calculatedPrice = Math.round(salePercentageCalc * 100) / 100
-      //   setDiscounts({reg: sheetPrice, percent: sheetDiscountPercentage, salePrice: sheetSalePrice, type: discountType[0]});
-      // } else 
+      // TODO: add fallback if both dicounts are applied
 
       if(sheetDiscountPercentage.length > 0){
         const percentageCalc = sheetPrice * (1 - sheetDiscountPercentage / 100);
@@ -338,16 +336,13 @@ export default function jerseyOrder() {
     requestedLength: string
   ) => {
     const availableLengths = visualLengthMap[back];
-
     if (!availableLengths) {
       return "regular";
     }
-
     const priorities = lengthPriority[requestedLength] || ["Regular"];
     const closestLength = priorities.find(
       (length) => availableLengths[length]
     );
-
     return availableLengths[closestLength || "Regular"] || "regular";
   };
 
@@ -355,9 +350,7 @@ export default function jerseyOrder() {
     const cut = formData.cut || "Fitted";
     const neck = formData.neckStyle || "High Neck";
     const length = formData.length || "Regular";
-
     const visualLength = getClosestVisualLength(neck, length);
-
     return `/drawings/${cut.toLowerCase()}/${neck.toLowerCase()}/${visualLength}.svg`;
   };
 
@@ -365,9 +358,7 @@ export default function jerseyOrder() {
     const cut = formData.cut || "Fitted";
     const back = formData.backStyle || "Full Back";
     const length = formData.length || "Regular";
-
     const visualLength = getClosestVisualLength(back, length);
-
     return `/drawings/${cut.toLowerCase()}/${back.toLowerCase()}/${visualLength}.svg`;
   };
 
@@ -388,7 +379,11 @@ export default function jerseyOrder() {
               priority
             />
           </Link>
-          <button>
+          <button
+            type="button"
+            onClick={() => setIsCartOpen(true)}
+            aria-label="Open cart"
+          >
             <Image
               src={"/icons/cart.svg"}
               alt={"pizza heist logo"}
@@ -396,11 +391,19 @@ export default function jerseyOrder() {
               height={18}
               priority
             />
-           {/* onlick set drawer open state */}
           </button>
         </div>
 
-        {/* <Drawer /> */}
+        <Drawer
+          isOpen={isCartOpen}
+          onClose={() => setIsCartOpen(false)}
+          headingChildren={      
+              <h2>Your Cart</h2>
+            }
+        >
+          {/* conditional render */}
+          <p>Your cart is currently empty.</p>
+        </Drawer>
 
         <div className={styles.formHeading}>
           <h1>Customize your jersey</h1>
