@@ -62,6 +62,7 @@ export default function jerseyOrder() {
   const [neckStyles, setNeckStyles] = useState<string[]>([]);
   const [backStyles, setBackStyles] = useState<string[]>([]);
   const [colors, setColors] = useState<string[]>([]);
+  const [quantity, setQuantity] = useState(1);
   const [price, setPrice] = useState<number>(0);
   const [discounts, setDiscounts] = useState<Discounts>({reg: 0, percent: 0, salePrice: 0, type: ""});
   const [showSizeChart, setShowSizeChart] = useState(false);
@@ -76,7 +77,7 @@ export default function jerseyOrder() {
     color: "",
     jerseyName: "",
     jerseyNumber: "",
-    pronouns: ""
+    pronouns: "",
   });
 
   const [formErrors, setFormErrors] = useState<FormErrors>({
@@ -88,7 +89,7 @@ export default function jerseyOrder() {
     color: "",
     jerseyName: "",
     jerseyNumber: "",
-    pronouns: ""
+    pronouns: "",
   });
 
   const [submitting, setSubmitting] = useState(false);
@@ -210,7 +211,7 @@ export default function jerseyOrder() {
       color: validateField("color", formData.color),
       jerseyName: validateField("jerseyName", formData.jerseyName),
       jerseyNumber: validateField("jerseyNumber", formData.jerseyNumber),
-      pronouns: validateField("pronouns", formData.pronouns)
+      pronouns: validateField("pronouns", formData.pronouns),
     };
     setFormErrors(newErrors);
     return Object.values(newErrors).every((err) => !err);
@@ -277,6 +278,7 @@ export default function jerseyOrder() {
         jerseyName: "",
         jerseyNumber: "",
         pronouns: "",
+
       });
       setFormErrors({
         size: "",
@@ -299,7 +301,6 @@ export default function jerseyOrder() {
   // Disable submit during submit
   const isSubmitDisabled = submitting
 
-
   // Functions and controls for form selections controlling display image
   const visualLengthMap: Record<string, Record<string, string>> = {
     "Full Back": {
@@ -307,18 +308,15 @@ export default function jerseyOrder() {
       "Regular": "regular",
       "Short": "short",
     },
-
     "High Neck": {
       "Crop": "crop",
       "Regular": "regular",
     },
-
     "Racer Back": {
       "Crop": "crop",
       "Long": "long",
       "Regular": "regular",
     },
-
     "Scoop Neck": {
       "Baby Crop": "baby crop",
       "Long": "long",
@@ -463,7 +461,7 @@ export default function jerseyOrder() {
 
               {/* display price */}
               <div className={`${styles.formRow} ${styles.priceRow}`}>
-                {/* next iteration: calculate conversion for international */}
+                {/* TODO: calculate conversion for international */}
                 {discounts.percent !== 0 || discounts.salePrice !== 0 ?
                 <div className={styles.salePrice}>
                   <p className={styles.strikethrough}>${discounts.reg}</p>
@@ -481,6 +479,27 @@ export default function jerseyOrder() {
                 </div>}
                 <span className={styles.disclaimer}>Tax and Shipping calculated at Checkout</span>
               </div>
+
+              <div className={`${styles.formRow} ${styles.qtyWrapper}`}>
+                <label>Quantity</label>
+                <button
+                  type="button"
+                  className={styles.minus}
+                  onClick={() => setQuantity((prev) => Math.max(1, prev - 1))}
+                  aria-label="Decrease quantity"
+                  disabled={quantity <= 1}
+                />
+                <input type="hidden" name="qty" value={quantity} />
+                <span>{quantity}</span>
+                <button
+                  className={styles.plus}
+                  type="button"
+                  onClick={() => setQuantity((prev) => Math.min(5, prev + 1))}
+                  aria-label="Increase quantity"
+                  disabled={quantity >= 5}
+                />
+              </div>
+
               <div className={styles.formRow}>
                 <label htmlFor="size">Size</label>
                 <select
@@ -679,6 +698,8 @@ export default function jerseyOrder() {
                   )}
                   <span className={styles.disclaimer}>Enter text here EXACTLY as you want the name to appear on the jersey, or leave blank for no name. Any text in this field will be printed as written. Please do not include extra characters unless you wish these to be printed on your jersey.</span>
                 </div>
+
+                {/* TODO: Change to select with input for other option */}
                 <div className={styles.formRow}>
                   <label htmlFor="pronouns">Pronouns</label>
                   <input
@@ -688,7 +709,7 @@ export default function jerseyOrder() {
                     onChange={handleChange}
                     onBlur={handleBlur}
                     required
-                    placeholder="Pronouns (i.e. she/her, they/them, etc.)"
+                    placeholder="Pronouns"
                   ></input>
                   {formErrors.pronouns && (
                     <span className={styles.error}>{formErrors.pronouns}</span>
@@ -704,7 +725,7 @@ export default function jerseyOrder() {
                   className="button-primary arrow-button"
                 >
                   {submitting ? (
-                    "Sending..."
+                    "Adding to Cart..."
                   ) : (
                   //   this button needs to push the jersey order details to the cart
                     <>

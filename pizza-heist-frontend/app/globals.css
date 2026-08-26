@@ -3,8 +3,9 @@
   --carbon-black-60: rgb(36, 46, 47, 0.6);
   --carbon-black-40: rgb(36, 46, 47, 0.4);
   --carbon-black-20: rgb(36, 46, 47, 0.2);
+  --carbon-black-5: rgb(36, 46, 47, 0.05);
   --deep-red: #C01B1C;
-  --deep-red-10: rgb(192, 27, 28, 0.1);
+  --deep-red-60: rgb(192, 27, 28, 0.6);
   --bright-red: #FF2523;
   --soft-linen: #F2EBDE;
   --poppy-yellow: #F6941D;
@@ -14,7 +15,7 @@
   --foreground: var(--carbon-black);
   --body-text: var(--carbon-black);
   --heading-text: var(--deep-red);
-  --font-body: var(--font-geist-mono);
+  --font-body: var(--font-courier-prime);
   --font-subheading: var(--font-manic);
   --font-heading: var(--font-inter);
   --mobile: 414px;
@@ -82,10 +83,10 @@ a:hover {
   border-radius: 1.25rem;
   background-color: var(--deep-red);
   color: var(--white);
-  font-family: var(--font-geist-mono);
+  font-family: var(--font-courier-prime);
   letter-spacing: -0.75px;
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.75rem;
   max-width: fit-content;
   border: solid 1.5px var(--poppy-yellow);
   box-shadow: 0 1px 3px var(--poppy-yellow-18), 0 1px 2px var(--poppy-yellow);
@@ -104,10 +105,10 @@ a:hover {
   border-radius: 1.25rem;
   background-color: var(--white);
   color: var(--deep-red);
-  font-family: var(--font-geist-mono);
-  letter-spacing: -0.75px;
+  font-family: var(--font-courier-prime);
+  letter-spacing: -0.65px;
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.75rem;
   max-width: fit-content;
   border: solid 1.5px var(--deep-red);
   box-shadow: 0 1px 3px var(--carbon-black-20), 0 1px 2px var(--carbon-black-20);

@@ -4,7 +4,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-geist-sans);
+  font-family: var(--font-courier-prime);
   min-height: calc(100vh - 64px);
 }
 
@@ -66,16 +66,32 @@
 .formHeading button {
     color: var(--deep-red);
     font-size: 0.65rem;
-    font-family: var(--font-geist-sans);
-    text-decoration: underline;
-    font-weight: 600;
-    text-underline-offset: 1px;
+    font-family: var(--font-inter);
+    font-weight: 700;
     text-transform: uppercase;
     transition: all 0.2s ease-in;
+    position: relative;
+}
+
+.formHeading button::after {
+  content: '';
+  position: absolute;
+  bottom: -1.5px;
+  left: 50%;
+  height: 1.5px;
+  background-color: var(--deep-red);
+  width: 100%;
+  border-radius: 2px;
+  transform: translatex(-50%);
+  transition: all 0.2s ease-out;
 }
 
 .formHeading button:hover {
     color: var(--bright-red);
+}
+
+.formHeading button:hover::after {
+    background-color: var(--bright-red);
 }
 
 .splitWrapper {
@@ -138,17 +154,38 @@
 
 .formRow.priceRow .salePrice p:nth-of-type(2){
     color: var(--bright-red);
+    font-family: var(--font-courier-prime);
+    font-size: 1.2rem;
+    letter-spacing: -2.15px;
 }
 
 .formRow.priceRow .salePrice span {
     color: var(--bright-red);
-    margin-left: 8px;
+    font-size: 0.7rem;
+    margin-left: 6px;
+    font-family: var(--font-courier-prime);
+    letter-spacing: -0.35px;
 }
 
 .formRow.priceRow .salePrice .strikethrough {
-    text-decoration: line-through;
     font-size: 1.1rem;
-    color: var(--carbon-black-60);
+    color: var(--carbon-black-40);
+    font-weight: 600;
+    font-family: var(--font-inter);
+    position: relative;
+    width: fit-content;
+}
+
+.formRow.priceRow .salePrice .strikethrough::before {
+ content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: 1.5px;
+  background-color: var(--carbon-black-20);
+  width: calc(100% + 12px);
+  border-radius: 2px;
+  transform: translate(-50%, -50%);
 }
 
 .formRow.priceRow .finalPrice,
@@ -159,13 +196,87 @@
     margin: 8px 0 -8px;
 }
 
+.formRow.qtyWrapper {
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.formRow.qtyWrapper label {
+    margin-right: 24px;
+}
+
+.formRow.qtyWrapper span {
+    background-color: var(--white);
+    width: 32px;
+    height: 32px;
+    text-align: center;
+    padding: 9px 10px 10px;
+    display: block;
+    font-weight: 600;
+}
+
+.formRow.qtyWrapper > button {
+    width: 32px;
+    height: 32px;
+    position: relative;
+    border: solid 1px var(--poppy-yellow-18);
+    cursor: pointer;
+}
+
+.formRow.qtyWrapper > button:disabled {
+    background: var(--carbon-black-5);
+}
+
+.formRow.qtyWrapper > button::after {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.formRow.qtyWrapper > button.minus {
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+} 
+
+.formRow.qtyWrapper > button.plus {
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+} 
+
+.formRow.qtyWrapper > button.minus::after {
+  content: '';
+  position: absolute;
+  height: 1.5px;
+  background-color: var(--deep-red);
+  width: 10px;
+  border-radius: 2px;
+}
+
+.formRow.qtyWrapper > button.plus::before,
+.formRow.qtyWrapper > button.plus::after {
+  content: '';
+  position: absolute;
+  height: 1.5px;
+  background-color: var(--deep-red);
+  width: 10px;
+  border-radius: 2px;
+  transition: all 0.2s ease-out;
+}
+
+.formRow.qtyWrapper > button.plus::before {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
 .formRow input,
 .formRow select {
     border: solid 1px var(--poppy-yellow-18);
     border-radius: 6px;
     font-size: 0.75rem;
-      padding: 0.65rem 0.75rem;
-    font-family: var(--font-geist-sans);
+    font-weight: 600;
+    letter-spacing: 0.1px;
+    padding: 0.65rem 0.75rem;
+    font-family: var(--font-inter);
 }
 
 .formRow input:focus,
@@ -194,6 +305,7 @@
   position: absolute;
   opacity: 0;
   pointer-events: none;
+
 }
 
 .toggleOption span {
@@ -202,6 +314,9 @@
   border: 1px solid var(--poppy-yellow-18);
   background: var(--white);
   font-size: 0.75rem;
+  font-family: var(--font-inter);
+  font-weight: 600;
+  letter-spacing: 0.1px;
   text-align: center;
   transition:
     background-color 150ms ease,

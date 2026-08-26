@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
-import { Inter, Geist_Mono } from "next/font/google";
+import { Inter, Courier_Prime } from "next/font/google";
 import localFont from 'next/font/local'
-import Link from "next/link";
-import Image from "next/image";
-import styles from "../../components/header/header.module.css";
 import "../../globals.css";
 import Footer from "../../components/footer/footer";
 
@@ -18,10 +15,10 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
-const geistMono = Geist_Mono({
+const courierPrime = Courier_Prime({
   subsets: ["latin"],
   weight: ["400", "700"], // normal & bold for code
-  variable: "--font-geist-mono",
+  variable: "--font-courier-prime",
 });
 
 export const metadata: Metadata = {
@@ -35,9 +32,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en-US" className={`${inter.variable} ${geistMono.variable} ${manic.variable}`}>
+    <html lang="en-US" className={`${inter.variable} ${courierPrime.variable} ${manic.variable}`}>
       <body>
-
           {children}
         <Footer />
       </body>
