@@ -1,5 +1,5 @@
 // server-side for fetching size chart from google sheet
-import { fetchSheetData } from "../../lib/gsheet"; // server-side helper
+import { fetchSheetData } from "@/app/lib/gsheet"; // server-side helper
 import { NextResponse } from "next/server";
 
 export async function GET() {

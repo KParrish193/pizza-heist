@@ -2,11 +2,12 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import Alert from "../../components/ux/alert/alert";
-import SizeChart from "../../components/size-chart/SizeChart";
+import Alert from "@/app/components/ux/alert/alert";
+import SizeChart from "@/app/components/ordering/size-chart/SizeChart";
 import Drawer from "@/app/components/ux/drawer/drawer";
-import Cart from "../../components/cart/cart";
-import { useCart } from "../../components/cart/cartContext";
+import Cart from "@/app/components/ordering/cart/cart";
+import { useCart, CartItem } from "@/app/components/ordering/cart/cartContext";
+import { useTeam } from "@/app/components/ordering/team/teamContext";
 import { useState, useEffect } from "react";
 import styles from "./order.module.css";
 
@@ -40,24 +41,10 @@ interface Discounts {
   type: string;
 }
 
-interface CartItem {
-  id: string;
-  price: number;
-  size: string;
-  cut: string;
-  length: string;
-  neckStyle: string;
-  backStyle: string;
-  color: string;
-  jerseyName: string;
-  jerseyNumber: string;
-  pronouns: string;
-  quantity: number;
-}
-
-export default function jerseyOrder() {
+export default function OrderForm() {
   // context for cart
   const { addItem } = useCart();
+  const { team } = useTeam();
 
   const [sizes, setSizes] = useState<string[]>([]);
   const [cuts, setCuts] = useState<string[]>([]);
@@ -112,6 +99,7 @@ export default function jerseyOrder() {
         .map((row) => row["Price"])
         .filter(Boolean) as any;
 
+        // TODO: update this to fix specific teams having discounts
       const sheetDiscountPercentage = data
         .map((row) => row["Discount Amount"])
         .filter(Boolean) as any;
@@ -128,7 +116,6 @@ export default function jerseyOrder() {
       var calculatedPrice = 0
 
       // TODO: add fallback if both dicounts are applied
-
       if(sheetDiscountPercentage.length > 0){
         const percentageCalc = sheetPrice * (1 - sheetDiscountPercentage / 100);
         calculatedPrice = Math.round(percentageCalc * 100) / 100;
@@ -265,6 +252,9 @@ export default function jerseyOrder() {
     try {
       const cartItem: CartItem = {
         id: crypto.randomUUID(),
+        teamId: team.id,
+        teamName: team.name,
+        teamSlug: team.slug,
         price,
         size: formData.size,
         cut: formData.cut,
@@ -725,9 +715,6 @@ export default function jerseyOrder() {
                     required
                     placeholder="Pronouns"
                   ></input>
-                  {formErrors.pronouns && (
-                    <span className={styles.error}>{formErrors.pronouns}</span>
-                  )}
                   <span className={styles.disclaimer}>Enter text here EXACTLY as you want it to appear on the jersey, or leave blank for no pronouns. Any text in this field will be printed as written. Please do not include extra characters unless you wish these to be printed on your jersey.</span>
                 </div>
 

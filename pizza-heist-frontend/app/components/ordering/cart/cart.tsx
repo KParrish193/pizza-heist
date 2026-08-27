@@ -3,7 +3,9 @@
 
 "use client";
 
+import { useState } from "react";
 import { useCart } from "./cartContext";
+import { useTeam } from "@/app/components/ordering/team/teamContext"
 import styles from "./cart.module.css";
 import Image from "next/image";
 
@@ -15,8 +17,10 @@ export default function Cart({
   onContinueShopping,
 }: CartProps) {
   const { items, removeItem, updateQuantity } = useCart();
-  const teamName = "Treasure Valley Roller Derby"
+  const [checkingOut, setCheckingOut] = useState(false);
+  const { team } = useTeam();
 
+  // display cart total
   const cartTotal = items.reduce(
     (total, item) => total + item.price * item.quantity,
     0
@@ -30,6 +34,36 @@ export default function Cart({
     );
   }
 
+  // handle creating checkout session
+  const handleCheckout = async () => {
+  setCheckingOut(true);
+
+  try {
+    const response = await fetch("/api/checkout", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        items,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Unable to start checkout.");
+    }
+
+    window.location.href = data.url;
+  } catch (error) {
+    console.error(error);
+    alert("Something went wrong starting checkout. Please try again.");
+  } finally {
+    setCheckingOut(false);
+  }
+};   
+
   return (
     <div className={styles.cart}>
       <div className={styles.cartItems}>
@@ -37,7 +71,7 @@ export default function Cart({
         <div className={styles.cartItem} key={item.id}>
             {/* TODO: update this to dynamically pull in team name from URL/team shop */}
         <h3>
-        {`${teamName} jersey` || "Custom Jersey"}
+        {`${team.name} jersey` || "Custom Jersey"}
         </h3>
           <div className={styles.itemDetails}>
             <p className={styles.disclaimer}>Details</p>
@@ -136,15 +170,13 @@ export default function Cart({
                 Keep Shopping
             </button>
             <button
-            type="button"
-            className={`button-primary ${styles.checkoutButton}`}
-            onClick={() => {
-                // Checkout functionality coming next
-            }}
-            >
-            Checkout
+                type="button"
+                className={`button-primary ${styles.checkoutButton}`}
+                onClick={handleCheckout}
+                disabled={checkingOut || items.length === 0}
+                >
+                {checkingOut ? "Loading..." : "Checkout"}
             </button>
-
         </div>
       </div>
     </div>
