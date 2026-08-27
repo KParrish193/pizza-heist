@@ -8,8 +8,6 @@ type SizeChartProps = {
   onClose: () => void;
 };
 
-type SizeChartData = string[][];
-
 export default function SizeChart({
   isOpen,
   onClose,
@@ -17,14 +15,34 @@ export default function SizeChart({
   const [data, setData] = useState<any>();
   const [loading, setLoading] = useState(false);
 
+  // lock layer beneath the chart modal
+  // TODO: fix this - not currently working
   useEffect(() => {
-    console.log("SizeChart effect", {
-        isOpen,
-        data,
-    });
+    if (!isOpen) return;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
 
-    if (!isOpen || data) return;
-    
+  // use escape key to close
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isOpen, onClose]);
+
+  // load size chart data
+  useEffect(() => {
+    if (!isOpen || data) return;    
     const fetchSizeChart = async () => {
       setLoading(true);
 
@@ -45,7 +63,7 @@ export default function SizeChart({
 
     fetchSizeChart();
   }, [isOpen, data]);
-
+  
   if (!isOpen) return null;
 
   const sizes = data ? Object.keys(data[0]).filter((key) => key !== "")

@@ -196,6 +196,7 @@
     margin: 8px 0 -8px;
 }
 
+/* qty row styles */
 .formRow.qtyWrapper {
     flex-direction: row;
     justify-content: flex-start;

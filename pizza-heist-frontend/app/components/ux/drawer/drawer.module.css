@@ -38,21 +38,27 @@
 /* drawer header styles */
 .drawerHeader {
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
   padding: 1rem 1.5rem;
   border-bottom: 1px solid #ddd;
   position: relative;
 }
 
+.drawerHeader h2 {
+  font-size: 2rem;
+  line-height: 1;
+}
+
 .closeBtn {
-    border: solid 1.5px var(--poppy-yellow);
+    border: solid 1px var(--poppy-yellow);
     background-color: var(--soft-linen);
     height: 28px;
     width: 28px;
     border-radius: 50%;
     position: absolute;
-    right: 18px;
-    top: 12px;
+    right: 1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
     cursor: pointer;
     box-shadow: 0 2px 5px var(--carbon-black-20);
 }

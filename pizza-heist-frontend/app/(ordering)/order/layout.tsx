@@ -3,6 +3,7 @@ import { Inter, Courier_Prime } from "next/font/google";
 import localFont from 'next/font/local'
 import "../../globals.css";
 import Footer from "../../components/footer/footer";
+import { CartProvider } from "../../components/cart/cartContext";
 
 const manic = localFont({
   src: '../../MANIC-Regular.woff2',
@@ -34,7 +35,9 @@ export default function RootLayout({
   return (
     <html lang="en-US" className={`${inter.variable} ${courierPrime.variable} ${manic.variable}`}>
       <body>
+        <CartProvider>
           {children}
+        </CartProvider>
         <Footer />
       </body>
     </html>

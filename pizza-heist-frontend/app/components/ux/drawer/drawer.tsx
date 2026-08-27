@@ -17,27 +17,25 @@ export default function Drawer({
   headingChildren,
   children,
 }: DrawerProps) {
+  // lock layer beneath the drawer
+  // TODO: fix this - not currently working
   useEffect(() => {
     if (!isOpen) return;
-
     document.body.style.overflow = "hidden";
-
     return () => {
       document.body.style.overflow = "";
     };
   }, [isOpen]);
 
+  // use escape key to close
   useEffect(() => {
     if (!isOpen) return;
-
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         onClose();
       }
     };
-
     document.addEventListener("keydown", handleKeyDown);
-
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };

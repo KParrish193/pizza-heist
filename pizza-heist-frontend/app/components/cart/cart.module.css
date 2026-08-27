@@ -1,0 +1,144 @@
+.cartItem {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 0.8rem;
+    padding-bottom: 1rem;
+    border-bottom: solid 1px var(--carbon-black-20);
+}
+
+.cartItem h3 {
+    grid-column: span 3;
+}
+
+.disclaimer {
+    font-size: 0.45rem;
+    color: var(--carbon-black-60);
+    font-family: var(--font-inter);
+    font-weight: 600;
+    letter-spacing: 0.7px;
+    text-transform: uppercase;
+    width: fit-content;
+    margin-bottom: 4px;
+}
+
+.cartItem .itemDetails {
+    grid-column: span 2;
+}
+
+.cartItem .quantity {
+    grid-column: span 1;
+}
+
+.cartItem .priceWrapper {
+    grid-column: span 1;
+}
+
+.cartItem p:not(.disclaimer) {
+    font-size: 0.75rem;
+}
+
+.quantity > div {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.quantity span {
+    background-color: var(--white);
+    width: 24px;
+    height: 24px;
+    text-align: center;
+    padding: 6px 8px 8px;
+    display: block;
+    font-weight: 600;
+}
+
+.quantity button {
+    width: 24px;
+    height: 24px;
+    position: relative;
+    border: solid 1px var(--poppy-yellow-18);
+    cursor: pointer;
+}
+
+.quantity button:disabled {
+    background-color: var(--carbon-black-20);
+    cursor: default;
+}
+
+.quantity button::after {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.quantity button.minus {
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+} 
+
+.quantity button.plus {
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+} 
+
+.quantity button.minus::after {
+  content: '';
+  position: absolute;
+  height: 1.5px;
+  background-color: var(--deep-red);
+  width: 10px;
+  border-radius: 2px;
+}
+
+.quantity button.plus::before,
+.quantity button.plus::after {
+  content: '';
+  position: absolute;
+  height: 1.5px;
+  background-color: var(--deep-red);
+  width: 10px;
+  border-radius: 2px;
+  transition: all 0.2s ease-out;
+}
+
+.quantity button.plus::before {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.priceWrapper {
+    position: relative;
+    justify-self: flex-end;
+}
+
+.priceWrapper .removeBtn {
+    cursor: pointer;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    border: none;
+    background: none;
+}
+
+.cartTotal {
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.cartTotal .disclaimer:not(.tax) {
+    font-size: 0.6rem;
+}
+
+.cartTotal .tax {
+    color: var(--carbon-black-40);
+}
+
+.cartFooter button {
+    margin: 0 auto;
+}
+
+.cartFooter button.keepShoppingButton {
+    margin-bottom: 0.6rem;
+}

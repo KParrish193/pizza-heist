@@ -2,10 +2,11 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import Alert from '../../components/ux/alert/alert';
-import Drawer from "@/app/components/ux/drawer/drawer";
-// import cart
+import Alert from "../../components/ux/alert/alert";
 import SizeChart from "../../components/size-chart/SizeChart";
+import Drawer from "@/app/components/ux/drawer/drawer";
+import Cart from "../../components/cart/cart";
+import { useCart } from "../../components/cart/cartContext";
 import { useState, useEffect } from "react";
 import styles from "./order.module.css";
 
@@ -30,7 +31,6 @@ interface FormErrors {
   color: string;
   jerseyName: string;
   jerseyNumber: string;
-  pronouns: string;
 }
 
 interface Discounts {
@@ -56,6 +56,9 @@ interface CartItem {
 }
 
 export default function jerseyOrder() {
+  // context for cart
+  const { addItem } = useCart();
+
   const [sizes, setSizes] = useState<string[]>([]);
   const [cuts, setCuts] = useState<string[]>([]);
   const [lengths, setLengths] = useState<string[]>([]);
@@ -91,13 +94,12 @@ export default function jerseyOrder() {
     backStyle: "",
     color: "",
     jerseyName: "",
-    jerseyNumber: "",
-    pronouns: "",
+    jerseyNumber: ""
   });
 
+  // form ux state
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
   const [touched, setTouched] = useState<{ [key: string]: boolean }>({});
 
   // set  dropdowns dynamically, import price from sheet
@@ -190,10 +192,16 @@ export default function jerseyOrder() {
       case "color":
         return value ? "" : "Please select a color";
       case "jerseyNumber":
-        if(!value.trim()) return "Jersey number cannot be empty";
-        if(value.length > 4) return "Jersey number cannot contain more than 4 characters";
+        if (!value.trim()) return "Jersey number cannot be empty";
+        if (value.length > 4) {
+          return "Jersey number cannot contain more than 4 characters";
+        }
+        return "";
       case "jerseyName":
-        if(value.length > 36) return "Jersey name cannot contain more than 36 characters";
+        if (value.length > 36) {
+          return "Jersey name cannot contain more than 36 characters";
+        }
+        return "";
       default:
         return "";
     }
@@ -208,8 +216,7 @@ export default function jerseyOrder() {
       backStyle: validateField("back", formData.backStyle),
       color: validateField("color", formData.color),
       jerseyName: validateField("jerseyName", formData.jerseyName),
-      jerseyNumber: validateField("jerseyNumber", formData.jerseyNumber),
-      pronouns: validateField("pronouns", formData.pronouns),
+      jerseyNumber: validateField("jerseyNumber", formData.jerseyNumber)
     };
     setFormErrors(newErrors);
     return Object.values(newErrors).every((err) => !err);
@@ -230,7 +237,7 @@ export default function jerseyOrder() {
     setFormErrors({ ...formErrors, [name]: validateField(name, value) });
   };
 
-  const handleChange = (
+    const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
@@ -245,27 +252,36 @@ export default function jerseyOrder() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    setSuccess("");
 
-    const isValid = validateForm(); // runs all field-level checks
+    const isValid = validateForm();
+
     if (!isValid) {
       setError("Please fix the errors in the order form before submitting.");
       return;
     }
 
     setSubmitting(true);
+
     try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+      const cartItem: CartItem = {
+        id: crypto.randomUUID(),
+        price,
+        size: formData.size,
+        cut: formData.cut,
+        length: formData.length,
+        neckStyle: formData.neckStyle,
+        backStyle: formData.backStyle,
+        color: formData.color,
+        jerseyName: formData.jerseyName,
+        jerseyNumber: formData.jerseyNumber,
+        pronouns: formData.pronouns,
+        quantity,
+      };
 
-      if (!res.ok) throw new Error("Failed to submit form");
+      addItem(cartItem);
+      setIsCartOpen(true);
 
-      setSuccess(
-        "Your jersey has been added to your cart!"
-      );
+      // Reset form
       setFormData({
         size: "",
         cut: "",
@@ -276,8 +292,10 @@ export default function jerseyOrder() {
         jerseyName: "",
         jerseyNumber: "",
         pronouns: "",
-
       });
+
+      setQuantity(1);
+
       setFormErrors({
         size: "",
         cut: "",
@@ -287,8 +305,8 @@ export default function jerseyOrder() {
         color: "",
         jerseyName: "",
         jerseyNumber: "",
-        pronouns: "",
       });
+
     } catch (err) {
       setError(`Something went wrong. ${err}. Please try again.`);
     } finally {
@@ -379,6 +397,7 @@ export default function jerseyOrder() {
               priority
             />
           </Link>
+
           <button
             type="button"
             onClick={() => setIsCartOpen(true)}
@@ -391,6 +410,7 @@ export default function jerseyOrder() {
               height={18}
               priority
             />
+            {/* TODO: Functionality to add brackets/bubble and number of items in cart count */}
           </button>
         </div>
 
@@ -398,11 +418,12 @@ export default function jerseyOrder() {
           isOpen={isCartOpen}
           onClose={() => setIsCartOpen(false)}
           headingChildren={      
-              <h2>Your Cart</h2>
+              <h2>Cart</h2>
             }
         >
-          {/* conditional render */}
-          <p>Your cart is currently empty.</p>
+          <Cart
+            onContinueShopping={() => setIsCartOpen(false)}
+          />
         </Drawer>
 
         <div className={styles.formHeading}>
@@ -444,25 +465,15 @@ export default function jerseyOrder() {
 
           <div className={styles.formWrapper}>
             <form onSubmit={handleSubmit} noValidate aria-live="assertive">
-              {/* How do I want the UI for adding to cart */}
               {error && (
                 <Alert
-                  heading={"Uh Oh!"}
+                  heading={"Oh no!"}
                   message={error}
                   type="error"
                   onClose={() => setError("")}
                 />
               )}
-              {success && (
-                <Alert
-                  heading={"Thank You!"}
-                  message={success}
-                  type="success"
-                  onClose={() => setSuccess("")}
-                />
-              )}
 
-              {/* display price */}
               <div className={`${styles.formRow} ${styles.priceRow}`}>
                 {/* TODO: calculate conversion for international */}
                 {discounts.percent !== 0 || discounts.salePrice !== 0 ?

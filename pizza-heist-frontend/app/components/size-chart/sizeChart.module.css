@@ -44,7 +44,7 @@
 }
 
 .closeBtn {
-    border: solid 1.5px var(--poppy-yellow);
+    border: solid 1px var(--poppy-yellow);
     background-color: var(--soft-linen);
     height: 28px;
     width: 28px;
