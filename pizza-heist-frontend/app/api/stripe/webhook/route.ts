@@ -110,28 +110,30 @@ export async function POST(req: Request) {
 
         const phone = customer?.phone || "";
 
+        // TODO: Change this to accept shipping information from Stripe instead of billing
         /*
          * Billing address collected by Stripe Checkout.
          */
-        const billingAddress = customer?.address;
+        // const billingAddress = customer?.address;
 
-        const billingAddressLine1 =
-          billingAddress?.line1 || "";
+        // const billingAddressLine1 =
+        //   billingAddress?.line1 || "";
 
-        const billingAddressLine2 =
-          billingAddress?.line2 || "";
+        // const billingAddressLine2 =
+        //   billingAddress?.line2 || "";
 
-        const billingCity =
-          billingAddress?.city || "";
+        // const billingCity =
+        //   billingAddress?.city || "";
 
-        const billingState =
-          billingAddress?.state || "";
+        // const billingState =
+        //   billingAddress?.state || "";
 
-        const billingPostalCode =
-          billingAddress?.postal_code || "";
+        // const billingPostalCode =
+        //   billingAddress?.postal_code || "";
 
-        const billingCountry =
-          billingAddress?.country || "";
+        // const billingCountry =
+        //   billingAddress?.country || "";
+
 
         /*
          * Stripe Tax amount, converted from cents to dollars.
@@ -172,12 +174,12 @@ export async function POST(req: Request) {
             email,
             phone,
 
-            billingAddressLine1,
-            billingAddressLine2,
-            billingCity,
-            billingState,
-            billingPostalCode,
-            billingCountry,
+            shippingAddress1: "",
+            shippingAddress2: "",
+            shippingCity: "",
+            shippingState: "",
+            shippingZip: "",
+            shippingCountry: "",
           });
         }
 
