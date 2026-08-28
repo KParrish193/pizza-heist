@@ -34,7 +34,8 @@ export interface PaidOrderData {
   billingLastName: string;
   email: string;
   phone: string;
-  shippingAddress: string;
+  shippingAddress1: string;
+  shippingAddress2: string;
   shippingCity: string;
   shippingState: string;
   shippingZip: string;
@@ -369,7 +370,7 @@ export async function addPaidOrder(
 
   await sheets.spreadsheets.values.append({
     spreadsheetId,
-    range: `${team.tabName}!A:AC`,
+    range: `${team.tabName}!A:AD`,
     valueInputOption: "USER_ENTERED",
     requestBody: {
       values: [[
@@ -397,11 +398,12 @@ export async function addPaidOrder(
         paidData.billingLastName,     // V BillingLastName
         paidData.email,               // W Email
         paidData.phone,               // X Phone
-        paidData.shippingAddress,     // Y ShippingAddress
-        paidData.shippingCity,        // Z ShippingCity
-        paidData.shippingState,       // AA ShippingState
-        paidData.shippingZip,         // AB ShippingZip
-        paidData.shippingCountry,     // AC ShippingCountry
+        paidData.shippingAddress1,    // Y ShippingAddress1
+        paidData.shippingAddress2,    // Z ShippingAddress2
+        paidData.shippingCity,        // AA ShippingCity
+        paidData.shippingState,       // AB ShippingState
+        paidData.shippingZip,         // AC ShippingZip
+        paidData.shippingCountry,     // AD ShippingCountry
       ]],
     },
   });
