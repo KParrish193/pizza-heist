@@ -1,14 +1,16 @@
 "use client";
 
-import Image from "next/image";
-import Link from "next/link";
-import Alert from "../../components/ux/alert/alert";
-import SizeChart from "../../components/size-chart/SizeChart";
-import Drawer from "@/app/components/ux/drawer/drawer";
-import Cart from "../../components/cart/cart";
-import { useCart } from "../../components/cart/cartContext";
 import { useState, useEffect } from "react";
 import styles from "./order.module.css";
+import Image from "next/image";
+import Link from "next/link";
+import Alert from "@/app/components/ux/alert/alert";
+import SizeChart from "@/app/components/ordering/size-chart/SizeChart";
+import Drawer from "@/app/components/ux/drawer/drawer";
+import Cart from "@/app/components/ordering/cart/cart";
+import { useCart, CartItem } from "@/app/components/ordering/cart/cartContext";
+import { useTeam } from "@/app/components/ordering/team/teamContext";
+import { calculatePriceByTeam } from "@/app/lib/pricing";
 
 interface FormData {
   size: string;
@@ -33,31 +35,11 @@ interface FormErrors {
   jerseyNumber: string;
 }
 
-interface Discounts {
-  reg: number;
-  percent: number;
-  salePrice: number;
-  type: string;
-}
-
-interface CartItem {
-  id: string;
-  price: number;
-  size: string;
-  cut: string;
-  length: string;
-  neckStyle: string;
-  backStyle: string;
-  color: string;
-  jerseyName: string;
-  jerseyNumber: string;
-  pronouns: string;
-  quantity: number;
-}
-
-export default function jerseyOrder() {
+export default function OrderForm() {
   // context for cart
   const { addItem } = useCart();
+  const { team } = useTeam();
+  const price = calculatePriceByTeam(team);
 
   const [sizes, setSizes] = useState<string[]>([]);
   const [cuts, setCuts] = useState<string[]>([]);
@@ -66,9 +48,7 @@ export default function jerseyOrder() {
   const [backStyles, setBackStyles] = useState<string[]>([]);
   const [colors, setColors] = useState<string[]>([]);
   const [quantity, setQuantity] = useState(1);
-  const [price, setPrice] = useState<number>(0);
-  const [discounts, setDiscounts] = useState<Discounts>({reg: 0, percent: 0, salePrice: 0, type: ""});
-  
+
   // ux state 
   const [showSizeChart, setShowSizeChart] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -107,40 +87,6 @@ export default function jerseyOrder() {
     async function loadOptions() {
       const res = await fetch("/api/jersey-options");
       const data: Record<string, string>[] = await res.json();
-
-      const sheetPrice = data
-        .map((row) => row["Price"])
-        .filter(Boolean) as any;
-
-      const sheetDiscountPercentage = data
-        .map((row) => row["Discount Amount"])
-        .filter(Boolean) as any;
-
-      const sheetSalePrice = data
-        .map((row) => row["Sale Price"])
-        .filter(Boolean) as any;
-      
-      const discountType = data
-        .map((row) => row["Discount Type"])
-        .filter(Boolean) as string[];
-
-      // find discount or sale price
-      var calculatedPrice = 0
-
-      // TODO: add fallback if both dicounts are applied
-
-      if(sheetDiscountPercentage.length > 0){
-        const percentageCalc = sheetPrice * (1 - sheetDiscountPercentage / 100);
-        calculatedPrice = Math.round(percentageCalc * 100) / 100;
-        setDiscounts({reg: sheetPrice, percent: sheetDiscountPercentage, salePrice: 0, type: discountType[0]});
-      } else if(sheetSalePrice.length > 0){
-        calculatedPrice = Math.round(sheetSalePrice * 100) / 100
-        setDiscounts({reg: sheetPrice, percent: 0, salePrice: sheetSalePrice, type: discountType[0]});
-      } else {
-        calculatedPrice = sheetPrice;
-        setDiscounts({reg: sheetPrice, percent: 0, salePrice: 0, type: ""})
-      }
-      setPrice(calculatedPrice);
       
       const filteredSizes = data
         .map((row) => row["Size"])
@@ -229,10 +175,8 @@ export default function jerseyOrder() {
     >
   ) => {
     const { name, value } = e.target;
-
     // Mark field as touched
     setTouched({ ...touched, [name]: true });
-
     // Validate the field now that user left it
     setFormErrors({ ...formErrors, [name]: validateField(name, value) });
   };
@@ -265,6 +209,9 @@ export default function jerseyOrder() {
     try {
       const cartItem: CartItem = {
         id: crypto.randomUUID(),
+        teamSlug: team.slug,
+        teamId: team.id,
+        teamName: team.name,
         price,
         size: formData.size,
         cut: formData.cut,
@@ -450,6 +397,7 @@ export default function jerseyOrder() {
                 alt={`image of jersey style ${frontImage}`}
                 width={250}
                 height={250}
+                loading="eager"
               />
             </div>
             <div>
@@ -459,6 +407,7 @@ export default function jerseyOrder() {
                 alt={`image of jersey style ${backImage}`}
                 width={250}
                 height={250}
+                loading="eager"
               />
             </div>
           </div>
@@ -476,20 +425,20 @@ export default function jerseyOrder() {
 
               <div className={`${styles.formRow} ${styles.priceRow}`}>
                 {/* TODO: calculate conversion for international */}
-                {discounts.percent !== 0 || discounts.salePrice !== 0 ?
+                {team.discountPercentage > 0 || team.salePrice > 0 ?
                 <div className={styles.salePrice}>
-                  <p className={styles.strikethrough}>${discounts.reg}</p>
-                  {discounts.percent !== 0 ?
-                  <p>-{discounts.percent}%
-                    <span className={styles.disclaimer}>{discounts.type}</span>
+                  <p className={styles.strikethrough}>${team.basePrice}</p>
+                  {team.discountPercentage > 0 ?
+                  <p>-{team.discountPercentage}%
+                    <span className={styles.disclaimer}>{team.pricingType}</span>
                   </p> : 
-                  <p>{discounts.salePrice}
-                    <span className={styles.disclaimer}>{discounts.type}</span>
+                  <p>{team.salePrice}
+                    <span className={styles.disclaimer}>{team.pricingType}</span>
                   </p>}
                   <p className={styles.finalPrice}>${price} USD</p>
                 </div> : 
                 <div className={styles.regularPrice}>
-                  <p>${discounts.reg} USD</p>
+                  <p>${team.basePrice} USD</p>
                 </div>}
                 <span className={styles.disclaimer}>Tax and Shipping calculated at Checkout</span>
               </div>
@@ -621,6 +570,8 @@ export default function jerseyOrder() {
                 {formErrors.length && (
                   <span className={styles.error}>{formErrors.length}</span>
                 )}
+                {/* TODO: make disclaimers dynamically updated by sheet */}
+                <span className={styles.disclaimer}>NOTE: the crop or baby-crop racerback style in smaller sizes may not fit a sanctioned size number and name, dependent on the uniform design font, the number of digits in your number, and the uniform size.</span>
               </div>
               
                 <div className={styles.formRow}>
@@ -725,9 +676,6 @@ export default function jerseyOrder() {
                     required
                     placeholder="Pronouns"
                   ></input>
-                  {formErrors.pronouns && (
-                    <span className={styles.error}>{formErrors.pronouns}</span>
-                  )}
                   <span className={styles.disclaimer}>Enter text here EXACTLY as you want it to appear on the jersey, or leave blank for no pronouns. Any text in this field will be printed as written. Please do not include extra characters unless you wish these to be printed on your jersey.</span>
                 </div>
 

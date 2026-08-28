@@ -3,8 +3,8 @@ import { Inter, Courier_Prime } from "next/font/google";
 import localFont from 'next/font/local'
 
 import "../globals.css";
-import Header from "../components/header/header";
-import Footer from "../components/footer/footer";
+import Header from "@/app/components/header/header";
+import Footer from "@/app/components/footer/footer";
 
 const manic = localFont({
   src: '../MANIC-Regular.woff2',

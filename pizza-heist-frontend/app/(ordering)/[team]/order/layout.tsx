@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { Inter, Courier_Prime } from "next/font/google";
 import localFont from 'next/font/local'
-import "../../globals.css";
-import Footer from "../../components/footer/footer";
-import { CartProvider } from "../../components/cart/cartContext";
+import "@/app/globals.css";
+import Footer from "@/app/components/footer/footer";
+import { fetchTeamBySlug } from "@/app/lib/gsheet";
+import { CartProvider } from "@/app/components/ordering/cart/cartContext";
+import { TeamProvider } from "@/app/components/ordering/team/teamContext";
 
 const manic = localFont({
-  src: '../../MANIC-Regular.woff2',
+  src: "../../../MANIC-Regular.woff2",
   variable: "--font-manic",
 })
 
@@ -27,20 +30,31 @@ export const metadata: Metadata = {
   description: ""
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
+export default async function ShopLayout({
+    children,
+  params,
+}: {
   children: React.ReactNode;
-}>) {
+  params: Promise<{ team: string }>;
+}) {
+  const { team: slug } = await params;
+
+  const team = await fetchTeamBySlug(slug);
+
+  if (!team || !team.active) {
+    notFound();
+  }
+
   return (
     <html lang="en-US" className={`${inter.variable} ${courierPrime.variable} ${manic.variable}`}>
       <body>
-        <CartProvider>
-          {children}
-        </CartProvider>
+        <TeamProvider team={team}>
+          <CartProvider>
+            {children}
+          </CartProvider>
+        </TeamProvider>
         <Footer />
       </body>
     </html>
   );
 }
-

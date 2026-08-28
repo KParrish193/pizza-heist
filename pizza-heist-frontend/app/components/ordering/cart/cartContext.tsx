@@ -9,6 +9,9 @@ import {
 
 export interface CartItem {
   id: string;
+  teamId: string;
+  teamName: string;
+  teamSlug: string;
   price: number;
   size: string;
   cut: string;
