@@ -2,10 +2,17 @@
 
 import { createContext, useContext, ReactNode } from "react";
 
-interface Team {
-  id: string;
+export interface Team {
   slug: string;
+  id: string;
   name: string;
+  basePrice: number;
+  discountPercentage: number;
+  salePrice: number;
+  pricingType: string;
+  active: boolean;
+  pickupAvailable: boolean;
+  tabName: string;
 }
 
 interface TeamContextType {
@@ -14,29 +21,13 @@ interface TeamContextType {
 
 const TeamContext = createContext<TeamContextType | undefined>(undefined);
 
-// TODO: update this when we add additional teams
-const teams: Record<string, Team> = {
-  "treasure-valley": {
-    id: "treasure-valley",
-    slug: "treasure-valley",
-    name: "Treasure Valley Roller Derby",
-  },
-};
-
 export function TeamProvider({
   children,
-  slug,
+  team,
 }: {
   children: ReactNode;
-  slug: string;
+  team: Team;
 }) {
-  const team = teams[slug];
-
-//   TODO: update this to redirect to 404
-  if (!team) {
-    return null;
-  }
-
   return (
     <TeamContext.Provider value={{ team }}>
       {children}

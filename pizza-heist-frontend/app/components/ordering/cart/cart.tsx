@@ -5,7 +5,6 @@
 
 import { useState } from "react";
 import { useCart } from "./cartContext";
-import { useTeam } from "@/app/components/ordering/team/teamContext"
 import styles from "./cart.module.css";
 import Image from "next/image";
 
@@ -18,7 +17,6 @@ export default function Cart({
 }: CartProps) {
   const { items, removeItem, updateQuantity } = useCart();
   const [checkingOut, setCheckingOut] = useState(false);
-  const { team } = useTeam();
 
   // display cart total
   const cartTotal = items.reduce(
@@ -70,9 +68,9 @@ export default function Cart({
       {items.map((item) => (
         <div className={styles.cartItem} key={item.id}>
             {/* TODO: update this to dynamically pull in team name from URL/team shop */}
-        <h3>
-        {`${team.name} jersey` || "Custom Jersey"}
-        </h3>
+          <h3>
+            {item.teamName ? `${item.teamName} jersey` : "Custom Jersey"}
+          </h3>
           <div className={styles.itemDetails}>
             <p className={styles.disclaimer}>Details</p>
             <p>
@@ -159,7 +157,10 @@ export default function Cart({
         <div className={styles.cartTotal}>
           <p className={styles.disclaimer}>Cart Total</p>
           <span>${cartTotal.toFixed(2)}</span>
-          <p className={`${styles.disclaimer} ${styles.tax}`}>Tax and Shipping calculated at Checkout</p>
+          {/* TODO: edit this when we implement additional shipping options */}
+          <p className={`${styles.disclaimer} ${styles.tax}`}>Shipping Option: Pick up in person — Free</p>
+          <p className={`${styles.disclaimer} ${styles.tax}`}>Tax calculated at Checkout</p>
+
         </div>
 
         <div>

@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { Inter, Courier_Prime } from "next/font/google";
 import localFont from 'next/font/local'
 import "@/app/globals.css";
 import Footer from "@/app/components/footer/footer";
+import { fetchTeamBySlug } from "@/app/lib/gsheet";
 import { CartProvider } from "@/app/components/ordering/cart/cartContext";
 import { TeamProvider } from "@/app/components/ordering/team/teamContext";
 
@@ -28,19 +30,25 @@ export const metadata: Metadata = {
   description: ""
 };
 
-export default async function RootLayout({
-  children,
+export default async function ShopLayout({
+    children,
   params,
-}: Readonly<{
+}: {
   children: React.ReactNode;
   params: Promise<{ team: string }>;
-}>) {
+}) {
+  const { team: slug } = await params;
 
-  const { team } = await params;
+  const team = await fetchTeamBySlug(slug);
+
+  if (!team || !team.active) {
+    notFound();
+  }
+
   return (
     <html lang="en-US" className={`${inter.variable} ${courierPrime.variable} ${manic.variable}`}>
       <body>
-        <TeamProvider slug={team}>
+        <TeamProvider team={team}>
           <CartProvider>
             {children}
           </CartProvider>
