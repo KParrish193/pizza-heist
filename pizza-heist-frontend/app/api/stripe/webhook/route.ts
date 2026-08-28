@@ -28,7 +28,10 @@ export async function POST(req: Request) {
       process.env.STRIPE_WEBHOOK_SECRET!
     );
   } catch (error) {
-    console.error("Stripe webhook signature verification failed:", error);
+    console.error(
+      "Stripe webhook signature verification failed:",
+      error
+    );
 
     return NextResponse.json(
       { error: "Invalid webhook signature." },
@@ -47,6 +50,18 @@ export async function POST(req: Request) {
           throw new Error(
             `Stripe session ${session.id} is missing an orderId.`
           );
+        }
+
+        /*
+         * Only mark the order as paid once Stripe confirms
+         * the payment was successfully completed.
+         */
+        if (session.payment_status !== "paid") {
+          console.log(
+            `Order ${orderId} has payment status: ${session.payment_status}.`
+          );
+
+          break;
         }
 
         console.log(
@@ -77,6 +92,9 @@ export async function POST(req: Request) {
           break;
         }
 
+        /*
+         * Customer information collected by Stripe Checkout.
+         */
         const customer = session.customer_details;
 
         const billingFirstName =
@@ -92,14 +110,40 @@ export async function POST(req: Request) {
 
         const phone = customer?.phone || "";
 
+        /*
+         * Billing address collected by Stripe Checkout.
+         */
+        const billingAddress = customer?.address;
+
+        const billingAddressLine1 =
+          billingAddress?.line1 || "";
+
+        const billingAddressLine2 =
+          billingAddress?.line2 || "";
+
+        const billingCity =
+          billingAddress?.city || "";
+
+        const billingState =
+          billingAddress?.state || "";
+
+        const billingPostalCode =
+          billingAddress?.postal_code || "";
+
+        const billingCountry =
+          billingAddress?.country || "";
+
+        /*
+         * Stripe Tax amount, converted from cents to dollars.
+         */
         const taxCollected =
           (session.total_details?.amount_tax || 0) / 100;
 
         /*
-         * Pickup is currently free.
+         * Pickup is currently the only fulfillment option.
          *
-         * When we add Stripe shipping options later,
-         * this will come from Stripe instead.
+         * TODO: When additional fulfillment options are added,
+         * get the selected shipping/fulfillment cost from Stripe.
          */
         const shippingPrice = 0;
 
@@ -113,6 +157,8 @@ export async function POST(req: Request) {
 
         /*
          * Write each jersey to its team's order tab.
+         *
+         * The team order sheet is the fulfillment source of truth.
          */
         for (const order of pendingOrders) {
           await addPaidOrder(order, {
@@ -120,10 +166,18 @@ export async function POST(req: Request) {
             paid: "Yes",
             shippingPrice,
             taxCollected,
+
             billingFirstName,
             billingLastName,
             email,
             phone,
+
+            billingAddressLine1,
+            billingAddressLine2,
+            billingCity,
+            billingState,
+            billingPostalCode,
+            billingCountry,
           });
         }
 
@@ -135,12 +189,17 @@ export async function POST(req: Request) {
       }
 
       default:
-        console.log(`Unhandled Stripe event: ${event.type}`);
+        console.log(
+          `Unhandled Stripe event: ${event.type}`
+        );
     }
 
     return NextResponse.json({ received: true });
   } catch (error) {
-    console.error("Stripe webhook processing error:", error);
+    console.error(
+      "Stripe webhook processing error:",
+      error
+    );
 
     return NextResponse.json(
       { error: "Webhook processing failed." },

@@ -34,6 +34,11 @@ export interface PaidOrderData {
   billingLastName: string;
   email: string;
   phone: string;
+  shippingAddress: string;
+  shippingCity: string;
+  shippingState: string;
+  shippingZip: string;
+  shippingCountry: string;
 }
 
 /**
@@ -364,31 +369,39 @@ export async function addPaidOrder(
 
   await sheets.spreadsheets.values.append({
     spreadsheetId,
-    range: `${team.tabName}!A:U`,
+    range: `${team.tabName}!A:AC`,
     valueInputOption: "USER_ENTERED",
     requestBody: {
       values: [[
-        order.createdAt,
-        order.orderId,
-        paidData.stripeSessionId,
-        order.color,
-        order.size,
-        order.cut,
-        order.neckStyle,
-        order.backStyle,
-        order.printedName,
-        order.printedNumber,
-        order.qty,
-        paidData.paid,
-        order.itemPrice,
-        order.discountType,
-        order.shippingFormat,
-        paidData.shippingPrice,
-        paidData.taxCollected,
-        paidData.billingFirstName,
-        paidData.billingLastName,
-        paidData.email,
-        paidData.phone,
+        order.createdAt,              // A CreatedAt
+        paidData.stripeSessionId,     // B StripeSessionId
+        order.orderId,                // C OrderId
+        order.teamId,                 // D TeamId
+        order.teamName,               // E TeamName
+        order.color,                  // F Color
+        order.size,                   // G Size
+        order.cut,                    // H Cut
+        order.neckStyle,              // I NeckStyle
+        order.backStyle,              // J BackStyle
+        order.printedName,            // K PrintedName
+        order.printedNumber,          // L PrintedNumber
+        order.pronouns,               // M Pronouns
+        order.qty,                    // N Qty
+        order.itemPrice,              // O ItemPrice
+        order.discountType,           // P DiscountType
+        "Paid",                       // Q Status
+        order.shippingFormat,         // R ShippingFormat
+        paidData.shippingPrice,       // S ShippingPrice
+        paidData.taxCollected,        // T TaxCollected
+        paidData.billingFirstName,    // U BillingFirstName
+        paidData.billingLastName,     // V BillingLastName
+        paidData.email,               // W Email
+        paidData.phone,               // X Phone
+        paidData.shippingAddress,     // Y ShippingAddress
+        paidData.shippingCity,        // Z ShippingCity
+        paidData.shippingState,       // AA ShippingState
+        paidData.shippingZip,         // AB ShippingZip
+        paidData.shippingCountry,     // AC ShippingCountry
       ]],
     },
   });
