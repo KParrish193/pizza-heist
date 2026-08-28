@@ -121,9 +121,32 @@ export async function POST(req: Request) {
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       line_items: lineItems,
+      
+      billing_address_collection: "required",
+
+      phone_number_collection: {
+        enabled: true,
+      },
+
+      automatic_tax: {
+          enabled: true,
+      },
+
+      // TODO: update this to manage shipping options dynamically once we figure out logic
+      shipping_options: [
+        {
+          shipping_rate_data: {
+            type: "fixed_amount",
+            fixed_amount: {
+              amount: 0,
+              currency: "usd",
+            },
+            display_name: "Pick up in person",
+          },
+        },
+      ],
 
       success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-
       cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}/${items[0].teamSlug}/order`,
 
       metadata: {
