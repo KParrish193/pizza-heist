@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "googleapis": "^176.0.0",
-    "resend": "^6.21.0"
-  }
-}

@@ -6,13 +6,7 @@ export default function Footer() {
     return (
       <footer className={styles.footer}>
         <div>
-        <div className={styles.leftContainer}>            
-            <Link  href="/">Refund & Cancellation Policy</Link>
-            <Link  href="/">Shipping & Pick Up</Link>
-        </div>
-
-        {/* center */}
-        <div className={styles.centerContainer}>
+            <div className={styles.topContainer}>            
                 <div className={styles.hasIcon}>
                     <a href={"mailto:agent@pizzaheistjerseys.com"}>
                         Send an encoded message: 
@@ -39,13 +33,16 @@ export default function Footer() {
                         />
                     </a>
                 </div>
-                <p className={styles.copyright}>&copy;Copyright Pizza Heist Jersey Co., 2026</p>
             </div>
 
-            <div className={styles.rightContainer}>            
+            <div className={styles.linksContainer}>
+                <Link  href="/">Refund & Cancellation Policy</Link>
+                <Link  href="/">Shipping & Pick Up</Link>        
                 <Link  href="/">Privacy Policy</Link>
                 <Link  href="/">Terms & Conditions</Link>
             </div>
+
+            <p className={styles.copyright}>&copy;Copyright Pizza Heist Jersey Co., 2026</p> 
         </div>
       </footer>
     );

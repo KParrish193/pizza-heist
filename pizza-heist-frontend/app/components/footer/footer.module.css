@@ -8,28 +8,40 @@
   max-width: var(--fullhd);
   margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.35rem;
 }
 
-.footer > div > div {
+.footer > div > .topContainer {
   display: flex;
   flex-direction: column;
-  align-self: center;
-}
-
-.footer > div > .centerContainer {
-  justify-self: center;
   align-items: center;
+  text-align: center;
+  width: 100%;
+  grid-column: 2/ span 2;
+  grid-row: 1;
 }
 
-.footer > div > .rightContainer {
-  justify-self: flex-end;
-  text-align: right;
+.footer > div > .linksContainer {
+  display: flex;
+  grid-column: 3 / span 2;
+  justify-content: flex-end;
+  grid-row: 2
 }
 
-.footer > div > div:not(.centerContainer) > a:first-of-type {
-  margin-bottom: 2px;
+.footer > div > .linksContainer > a {
+  margin-right: 1.5rem;
+  font-size: 0.55rem;
+}
+
+.footer > div > .linksContainer > a:last-of-type {
+  margin-right: 0;
+}
+
+.copyright {
+  font-size: 0.55rem;
+  grid-column: 1/ span 2;
+  grid-row: 2;
 }
 
 .footer a:hover {
@@ -65,7 +77,3 @@ a:hover {
   filter: invert(30%) sepia(70%) saturate(4038%) hue-rotate(344deg) brightness(100%) contrast(118%);
 }
 
-.copyright {
-  font-size: 0.55rem;
-  margin-top: 8px;
-}
