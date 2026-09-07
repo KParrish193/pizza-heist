@@ -19,6 +19,8 @@
   padding: 64px;
 }
 
+
+
 /* hero section */
 .hero {
   text-align: center;
@@ -32,7 +34,7 @@
 
 .hero h3 {
   color: var(--deep-red);
-  font-size: 1.7rem;
+  font-size: 1.5rem;
 }
 
 .main h2 {
@@ -99,7 +101,6 @@
 }
 
 /* about section */
-
 .about > div {
   display: flex;
   flex-direction: column;
@@ -133,34 +134,39 @@
 }
 
 
-
-/* Enable hover only on non-touch devices
-@media (hover: hover) and (pointer: fine) {
-  a.primary:hover {
-    background: var(--button-primary-hover);
-    border-color: transparent;
+@media(max-width: 414px) {
+  .main {
+    padding: 28px;
   }
 
-  a.secondary:hover {
-    background: var(--button-secondary-hover);
-    border-color: transparent;
-  }
-} */
-
-/* @media (prefers-color-scheme: dark) {
-  .logo {
-    filter: invert();
+  .main h2 {
+    text-align: center;
+    font-size: 1.7rem;
+    line-height: 1;
   }
 
-  .page {
-    --background: #000;
-    --foreground: #000;
 
-    --text-primary: #ededed;
-    --text-secondary: #999;
 
-    --button-primary-hover: #ccc;
-    --button-secondary-hover: #1a1a1a;
-    --button-secondary-border: #1a1a1a;
+  .hero h1 {
+    line-height: 0.7;
+    margin-bottom: 0;
   }
-} */
+
+  .hero h3,
+  .about h3 {
+     font-size: 1.2rem;
+  }
+
+  .hero img {
+    height: 84px;
+    width: 84px;
+  }
+
+  .processCopy h2 {
+    margin-bottom: 0;
+  }
+
+  .about > h2 {
+    margin-bottom: -8px;
+  } 
+}
