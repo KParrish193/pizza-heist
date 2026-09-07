@@ -36,10 +36,10 @@ export default function Footer() {
             </div>
 
             <div className={styles.linksContainer}>
-                <Link  href="/">Refund & Cancellation Policy</Link>
-                <Link  href="/">Shipping & Pick Up</Link>        
-                <Link  href="/">Privacy Policy</Link>
-                <Link  href="/">Terms & Conditions</Link>
+                <Link  href="/refund-policy">Refund & Cancellation Policy</Link>
+                <Link  href="/shipping">Shipping & Pick Up</Link>        
+                <Link  href="/privacy-policy">Privacy Policy</Link>
+                <Link  href="/terms">Terms & Conditions</Link>
             </div>
 
             <p className={styles.copyright}>&copy;Copyright Pizza Heist Jersey Co., 2026</p> 

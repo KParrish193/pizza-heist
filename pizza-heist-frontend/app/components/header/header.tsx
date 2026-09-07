@@ -57,11 +57,13 @@ export default function Header() {
         </Link>
 
         <div className={styles.searchWrapper}></div>
-        <div className={styles.ctaWrapper}>
-            <a className="button-secondary" href={"/"}>
+
+        {/* TODO: Add new team CTA when form is built */}
+        {/* <div className={styles.ctaWrapper}>
+            <a className="button-secondary" href={"/new-teams"}>
                 New Teams
             </a>
-        </div>
+        </div> */}
       </div>
     </header>
   );

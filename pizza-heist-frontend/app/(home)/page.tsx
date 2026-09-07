@@ -67,13 +67,14 @@ export default async function Home() {
                     {cta.heading ? <h2>{cta.heading}</h2> : null}
                     {cta.subheading ? <h3>{cta.subheading}</h3> : null}
                     {cta.copy ? <p> {cta.copy}</p> : null}
+                    
                     {/* link */}
                     {cta.link && cta.link !== " " ? (
                       <a className="button-primary" href={cta.link}>
                         {cta.link_text}
                       </a>
                     ) : (
-                      <Link className="button-primary" href={"/"}>
+                      <Link className="button-primary" href={"/new-teams"}>
                       </Link>
                     )}
                 </div>

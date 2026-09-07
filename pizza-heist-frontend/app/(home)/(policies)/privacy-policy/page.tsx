@@ -1,6 +1,4 @@
 import { fetchSheetData, SheetRow } from "@/app/lib/gsheet";
-// import Link from "next/link";
-import Image from "next/image";
 import styles from "./privacy.module.css";
 import pageStyles from "../page.module.css";
 
@@ -10,7 +8,7 @@ export default async function PrivacyPolicy() {
   let privacyContent: SheetRow[] = [];
 
   try {
-    const contentRows = await fetchSheetData("FAQ", "A1:B20");
+    const contentRows = await fetchSheetData("PrivacyPolicy", "A1:B20");
     privacyContent = contentRows
   } catch (err: unknown) {
     if (err instanceof Error) {
@@ -33,7 +31,6 @@ export default async function PrivacyPolicy() {
                 );
             })}
         </section>
-        
       </main>
     </div>
   );
