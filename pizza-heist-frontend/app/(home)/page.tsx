@@ -44,8 +44,8 @@ export default async function Home() {
           <Image
             src={"/logos/slice-03.svg"}
             alt={"pizza slice logo"}
-            width={125}
-            height={125}
+            width={120}
+            height={120}
             priority
           />
           {heroContent.map((hero, i: number) => {
@@ -60,15 +60,13 @@ export default async function Home() {
           })}
         </section>
 
-        <section className={styles.cta}>
+        {/* <section className={styles.cta}>
           {ctaContent.map((cta, i: number) => {
             return (              
                 <div className={styles.ctaWrapper} key={i}>
                     {cta.heading ? <h2>{cta.heading}</h2> : null}
                     {cta.subheading ? <h3>{cta.subheading}</h3> : null}
                     {cta.copy ? <p> {cta.copy}</p> : null}
-                    
-                    {/* link */}
                     {cta.link && cta.link !== " " ? (
                       <a className="button-primary" href={cta.link}>
                         {cta.link_text}
@@ -80,7 +78,7 @@ export default async function Home() {
                 </div>
             );
           })}
-        </section>
+        </section> */}
 
         <section>
           <div className={styles.processCopy}>
