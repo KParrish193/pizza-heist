@@ -56,6 +56,7 @@ export default function Header() {
           />
         </Link>
 
+        {/* TODO: add team search functionality  */}
         <div className={styles.searchWrapper}></div>
 
         {/* TODO: Add new team CTA when form is built */}
@@ -63,6 +64,15 @@ export default function Header() {
             <a className="button-secondary" href={"/new-teams"}>
                 New Teams
             </a>
+        </div> */}
+
+        {/* TODO: add header dropdown functionality */}
+        {/* <div>
+          <button className={styles.hamburger}>
+            <span />
+            <span />
+            <span />
+          </button>
         </div> */}
       </div>
     </header>

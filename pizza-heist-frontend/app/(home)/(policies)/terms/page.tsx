@@ -1,5 +1,5 @@
 import { fetchSheetData, SheetRow } from "@/app/lib/gsheet";
-import styles from "./privacy.module.css";
+import styles from "../policies.module.css";
 import pageStyles from "../page.module.css";
 
 export const revalidate = 0;
