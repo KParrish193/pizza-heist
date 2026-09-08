@@ -19,8 +19,6 @@
   padding: 64px;
 }
 
-
-
 /* hero section */
 .hero {
   text-align: center;
@@ -134,9 +132,9 @@
 }
 
 
-@media(max-width: 414px) {
+@media (max-width: 414px) {
   .main {
-    padding: 28px;
+    padding: 24px;
   }
 
   .main h2 {
@@ -145,8 +143,6 @@
     line-height: 1;
   }
 
-
-
   .hero h1 {
     line-height: 0.7;
     margin-bottom: 0;
@@ -154,12 +150,18 @@
 
   .hero h3,
   .about h3 {
-     font-size: 1.2rem;
+     font-size: 1.4rem;
   }
 
   .hero img {
     height: 84px;
     width: 84px;
+  }
+
+  .hero p {
+    width: 85%;
+    margin: 0 auto;
+    margin-top: 8px;
   }
 
   .processCopy h2 {
