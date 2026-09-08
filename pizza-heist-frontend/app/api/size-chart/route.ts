@@ -5,7 +5,27 @@ import { NextResponse } from "next/server";
 export async function GET() {
   try {
     const sizeChart = await fetchSheetData("SizeChart", "A1:K9");
-    return NextResponse.json(sizeChart);
+    const instructionData = await fetchSheetData("SizeChart", "A15:A19");
+    
+    const measuringInstructions = [];
+    for (let i = 0; i < instructionData.length; i += 2) {
+      const label = instructionData[i]?.["Measuring Instructions"];
+      const description = instructionData[i + 1]?.["Measuring Instructions"];
+
+      if (label && description) {
+        measuringInstructions.push({
+          label,
+          description,
+        });
+      }
+    }
+
+    console.log(measuringInstructions)
+
+    return NextResponse.json({
+      sizeChart,
+      measuringInstructions,
+    });
   } catch {
     return NextResponse.json(
       { error: "Failed to fetch size chart" },

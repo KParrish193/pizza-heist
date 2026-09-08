@@ -1,7 +1,22 @@
 "use client";
 
-import { JSXElementConstructor, Key, ReactElement, ReactNode, ReactPortal, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./sizeChart.module.css";
+
+type SizeChartRow = {
+  "": string;
+  [size: string]: string | number;
+};
+
+type MeasuringInstruction = {
+  label: string;
+  description: string;
+};
+
+type SizeChartData = {
+  sizeChart: SizeChartRow[];
+  measuringInstructions: MeasuringInstruction[];
+};
 
 type SizeChartProps = {
   isOpen: boolean;
@@ -12,20 +27,21 @@ export default function SizeChart({
   isOpen,
   onClose,
 }: SizeChartProps) {
-  const [data, setData] = useState<any>();
+  const [data, setData] = useState<SizeChartData | null>(null);
   const [loading, setLoading] = useState(false);
 
-  // lock layer beneath the chart modal
-  // TODO: fix this - not currently working
+  // Lock layer beneath the chart modal
   useEffect(() => {
     if (!isOpen) return;
+
     document.body.style.overflow = "hidden";
+
     return () => {
       document.body.style.overflow = "";
     };
   }, [isOpen]);
 
-  // use escape key to close
+  // Use Escape key to close
   useEffect(() => {
     if (!isOpen) return;
 
@@ -34,26 +50,29 @@ export default function SizeChart({
         onClose();
       }
     };
+
     document.addEventListener("keydown", handleKeyDown);
+
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, [isOpen, onClose]);
 
-  // load size chart data
+  // Load size chart data
   useEffect(() => {
-    if (!isOpen || data) return;    
+    if (!isOpen || data) return;
+
     const fetchSizeChart = async () => {
       setLoading(true);
 
       try {
         const res = await fetch("/api/size-chart");
+
         if (!res.ok) {
           throw new Error("Failed to fetch size chart");
         }
-        const sizeChart = await res.json();
-        setData(sizeChart);
-
+        const result: SizeChartData = await res.json();
+        setData(result);
       } catch (error) {
         console.error("Error fetching size chart:", error);
       } finally {
@@ -62,12 +81,18 @@ export default function SizeChart({
     };
 
     fetchSizeChart();
+    
   }, [isOpen, data]);
-  
+
   if (!isOpen) return null;
 
-  const sizes = data ? Object.keys(data[0]).filter((key) => key !== "")
-  : [];
+  const sizeChart = data?.sizeChart ?? [];
+  const measuringInstructions = data?.measuringInstructions ?? [];
+
+  const sizes =
+    sizeChart.length > 0
+      ? Object.keys(sizeChart[0]).filter((key) => key !== "")
+      : [];
 
   return (
     <div
@@ -83,6 +108,7 @@ export default function SizeChart({
       >
         <div className={styles.header}>
           <h2 id="size-chart-title">Size Chart</h2>
+          {/* TODO: Add a toggle for cm (metric) */}
           <span className={styles.disclaimer}>(inches)</span>
 
           <button
@@ -96,41 +122,70 @@ export default function SizeChart({
         <div className={styles.content}>
           {loading && <p>Loading size chart...</p>}
 
-          {!loading && data && data.length > 0 && (
-            <table>
-              <thead>
-                <tr>
-                  <th></th>
-                    {sizes.map((size) => (
-                    <th className={styles.sizeLabel} key={size}>{size}</th>
-                    ))}
-                </tr>
-              </thead>
+          {!loading && data && (
+            <>
+              {sizeChart.length > 0 && (
+                <table>
+                  <thead>
+                    <tr>
+                      <th></th>
 
-              <tbody>
-                {data.map((row: { [x: string]: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; }, index: Key | null | undefined) => {
-                    if (row[""] === "Length:") {
-                    return (
-                        <tr key={index}>
-                            <th></th>
-                            <th className={styles.lengthLabel} colSpan={sizes.length}>
-                                Length
-                            </th>
-                        </tr>
-                    );
-                    }
-
-                    return (
-                    <tr key={index}>
-                        <th className={styles.headingColumn}>{row[""]}</th>
-                        {sizes.map((size) => (
-                            <td key={size}>{row[size]}</td>
-                        ))}
+                      {sizes.map((size) => (
+                        <th
+                          className={styles.sizeLabel}
+                          key={size}
+                        >
+                          {size}
+                        </th>
+                      ))}
                     </tr>
-                    );
-                })}
-              </tbody>
-            </table>
+                  </thead>
+
+                  <tbody>
+                    {sizeChart.map((row, index) => {
+                      if (row[""] === "Length:") {
+                        return (
+                          <tr key={index}>
+                            <th></th>
+                            <th
+                              className={styles.lengthLabel}
+                              colSpan={sizes.length}
+                            >
+                              Length
+                            </th>
+                          </tr>
+                        );
+                      }
+
+                      return (
+                        <tr key={index}>
+                          <th className={styles.headingColumn}>
+                            {row[""]}
+                          </th>
+
+                          {sizes.map((size) => (
+                            <td key={size}>
+                              {row[size]}
+                            </td>
+                          ))}
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              )}
+              
+              {measuringInstructions.length > 0 && (
+                <div className={styles.instructions}>
+                  {measuringInstructions.map((instruction) => (
+                    <div key={instruction.label}>
+                      <h4>{instruction.label}:</h4>
+                      <p>{instruction.description}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </>
           )}
 
           {!loading && !data && (
