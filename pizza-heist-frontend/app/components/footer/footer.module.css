@@ -78,7 +78,7 @@ a:hover {
   filter: invert(30%) sepia(70%) saturate(4038%) hue-rotate(344deg) brightness(100%) contrast(118%);
 }
 
-@media (max-width: 414px) {
+@media (max-width: 769px) {
   .footer > div > .linksContainer {
     width: 100%;
     grid-column: 1/ span 4;

@@ -41,7 +41,7 @@ body {
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: var(--font-body), sans-serif;
+  font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   letter-spacing: -0.85px;
@@ -98,6 +98,7 @@ a:hover {
   transition: all 0.2 ease;
   cursor: pointer;
   border: solid 1.5px var(--deep-red);
+  color: var(--white);
 }
 
 .button-secondary {

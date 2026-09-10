@@ -20,8 +20,6 @@ export async function GET() {
       }
     }
 
-    console.log(measuringInstructions)
-
     return NextResponse.json({
       sizeChart,
       measuringInstructions,

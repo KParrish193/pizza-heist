@@ -1,0 +1,109 @@
+.successHeader {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.orderNumber {
+   margin: 8px 0; 
+}
+
+.message {
+    width: 75%;
+    text-align: center;
+}
+
+.email {
+    color: var(--deep-red);
+}
+
+.orderDetailsWrapper {
+    margin: 32px 0;
+}
+
+.orderDetailsWrapper > h2 {
+    text-align: center;
+    margin-bottom: 0 !important;
+    color: var(--deep-red);
+    grid-row: 1;
+    grid-column: 1/ span 4;
+}
+
+.orderDetails {
+    display: flex;
+    width: 100%;
+    gap: 1rem;
+}
+
+.orderItem {
+    width: 50%;
+    align-items: center;
+    padding-bottom: 1rem;
+}
+
+.orderItem > span {
+    font-family: var(--font-manic);
+}
+
+.card > a {
+    margin: 0 auto;
+}
+
+.cardNoSession > p {
+    margin: 8px 0 0;
+}
+
+.cardNoSession > a {
+    margin: 16px 0 0;
+}
+
+@media (min-width: 1025px ){
+    .orderDetails {
+        justify-content: center;
+    }
+    
+    .orderItem {
+        width: 25%;
+    }
+}
+
+@media (max-width: 769px) {
+    .successHeader {
+        align-items: flex-start;
+    }
+
+    .successHeader p:not(.orderNumber) {
+        margin-bottom: 6px;
+    }
+    
+    .message {
+        text-align: left;
+    }
+    
+    .orderDetailsWrapper > h2 {
+        text-align: left !important;
+        font-size: 1.4rem !important;
+    }
+    
+    .orderDetails {
+        margin: 4px 0 16px;
+        flex-direction: column;
+    }
+
+    .orderItem {
+        width: 75%;
+        border-bottom: solid 1px var(--carbon-black-20);
+    }
+
+    .orderItem:last-of-type {
+        border-bottom: none;
+    }
+
+    .card > a {
+        margin: 0;
+    }
+
+    .cardNoSession > a {
+
+    }
+}
