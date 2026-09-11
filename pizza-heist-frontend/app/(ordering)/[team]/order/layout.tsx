@@ -6,7 +6,7 @@ import "@/app/globals.css";
 import Footer from "@/app/components/footer/footer";
 import { fetchTeamBySlug } from "@/app/lib/gsheet";
 import { CartProvider } from "@/app/components/ordering/cart/cartContext";
-import { TeamProvider } from "@/app/components/ordering/team/teamContext";
+import { TeamProvider } from "@/app/components/ordering/team/teamContext"; 
 
 const manic = localFont({
   src: "../../../MANIC-Regular.woff2",

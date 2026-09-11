@@ -1,8 +1,9 @@
 import Stripe from "stripe";
 import Link from "next/link";
 import styles from "./success.module.css";
-import layoutStyles from "../../page.module.css";
+import layoutStyles from "@/app/(home)/page.module.css";
 import { findPendingOrder } from "@/app/lib/gsheet";
+import ClearCart from "./clearCart";
 
 const stripe = new Stripe(process.env.STRIPE_TEST_SECRET_KEY!);
 
@@ -24,10 +25,10 @@ export default async function SuccessPage({
             <div className={styles.cardNoSession}>
             <h1>Order Confirmation</h1>
             <p>
-              We couldn't find your checkout session and are unable to confirm your order at this time. If you completed a payment, please contact us at <a href="mailto:agent@pizzaheistjerseys.com"></a> and we'll be happy to help.
+              We couldn't find your checkout session and are unable to confirm your order at this time. If you completed a payment, please contact us at <a href="mailto:agent@pizzaheistjerseys.com">agent@pizzaheistjerseys.com</a> and we'll be happy to help.
             </p>
 
-            <Link href="/" className="button-secondary">
+            <Link href="/treasure-valley/order" className="button-secondary">
               Return to Pizza Heist
             </Link>
             </div>
@@ -57,14 +58,12 @@ export default async function SuccessPage({
     const customerName = session.customer_details?.name;
     const email = session.customer_details?.email;
 
-    console.log("SUCCESS PAGE ORDERS:", orders);
-
     return (
     <div className={layoutStyles.body}>
       <main className={layoutStyles.main}>
         <div className={styles.card}>
           <div className={styles.successHeader}>
-                      <h1>Transmission received!</h1>
+            <h1>Transmission received!</h1>
             <p className={styles.thankYou}>
               Thanks for your order
               {customerName ? `, ${customerName}` : ""}!
@@ -87,7 +86,6 @@ export default async function SuccessPage({
               </p>
             </div>
           </div>
-
 
           <div className={styles.orderDetailsWrapper}>
             <h2>Order Details:</h2>
@@ -142,10 +140,11 @@ export default async function SuccessPage({
               <p>We're unable to display your order details right now.</p>
             )}
           </div>
+          <ClearCart />
           </div>
           
           {/* TODO: Send this to last team store not home page */}
-          <Link href="/" className="button-primary">
+          <Link href="/treasure-valley/order" className="button-primary">
             Return to Shop
           </Link>
         </div>
@@ -171,7 +170,7 @@ export default async function SuccessPage({
           </p>
 
           {/* TODO: Send this to last team store not home page */}
-          <Link href="/" className="button-secondary">
+          <Link href="/treasure-valley/order" className="button-secondary">
             Return to Pizza Heist
           </Link>
         </div>
