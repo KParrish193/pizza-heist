@@ -143,8 +143,9 @@ export async function fetchTeamBySlug(
     pricingType: row["Pricing Type"],
     active: row["Active"]?.toLowerCase() === "true",
     pickupAvailable:
-      row["Pickup Available"]?.toLowerCase() === "true",
+    row["Pickup Available"]?.toLowerCase() === "true",
     tabName: row["TabName"],
+    shopPassword: row["Shop Password"] || "",
   };
 }
 

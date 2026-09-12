@@ -13,6 +13,7 @@ export interface Team {
   active: boolean;
   pickupAvailable: boolean;
   tabName: string;
+  shopPassword: string;
 }
 
 interface TeamContextType {
