@@ -66,10 +66,15 @@ export async function sendCustomerOrderConfirmation({
     )
     .join("");
 
-  const { data, error } = await resend.emails.send({
-    from:
-      process.env.RESEND_FROM_EMAIL!,
 
+    const fromEmail = process.env.RESEND_FROM_EMAIL;
+
+    if (!fromEmail) {
+      throw new Error("Missing RESEND_FROM_EMAIL environment variable");
+    }
+
+  const { data, error } = await resend.emails.send({
+    from: fromEmail,
     to: customerEmail,
 
     subject: `Pizza Heist Order Confirmation #${orderId}`,
