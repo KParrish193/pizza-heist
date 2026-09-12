@@ -73,7 +73,7 @@ export async function sendCustomerOrderConfirmation({
     }
 
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL!;
-    const logoUrl = `${siteUrl}/logos/logo.svg`;
+    const logoUrl = `${siteUrl}/logos/horizontal-logo.png`;
 
 
 
@@ -173,8 +173,12 @@ export async function sendOwnerOrderNotification({
   customerPhone: string;
   orders: PendingOrder[];
 }) {
+    const fromEmail = process.env.RESEND_FROM_EMAIL;
+  if (!fromEmail) {
+    throw new Error("Missing RESEND_FROM_EMAIL environment variable");
+  }
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL!;
-  const logoUrl = `${siteUrl}/logos/logo.svg`;
+  const logoUrl = `${siteUrl}/logos/horizontal-logo.png`;
 
   const orderItems = orders
     .map(
@@ -185,7 +189,7 @@ export async function sendOwnerOrderNotification({
           border: 1px solid #ddd;
           border-radius: 8px;
         ">
-          <h3 style="margin-top: 0; color: #DD5339;">
+          <h3 style="margin-top: 0; color: #C01B1C;">
             ${order.teamName}
           </h3>
 
@@ -213,8 +217,8 @@ export async function sendOwnerOrderNotification({
 
   const { data, error } = await resend.emails.send({
     from: process.env.RESEND_FROM_EMAIL!,
-    to: "riotatchya@gmail.com",
-    // to: "agent@pizzaheistjerseys.com",
+    // to: "riotatchya@gmail.com",
+    to: fromEmail,
     replyTo: customerEmail || undefined,
     subject: `New Pizza Heist Order #${orderId}`,
 
@@ -223,7 +227,7 @@ export async function sendOwnerOrderNotification({
         max-width: 600px;
         margin: 0 auto;
         font-family: Arial, sans-serif;
-        color: #142F42;
+        color: #242E2F;
         line-height: 1.5;
       ">
 
@@ -231,7 +235,7 @@ export async function sendOwnerOrderNotification({
         <div style="
           text-align: center;
           padding: 24px;
-          background-color: #142F42;
+          background-color: #C01B1C;
         ">
           <img
             src="${logoUrl}"
@@ -252,7 +256,7 @@ export async function sendOwnerOrderNotification({
 
           <h1 style="
             margin-top: 0;
-            color: #DD5339;
+            color: #FF2523;
           ">
             New Order Received!
           </h1>
@@ -266,7 +270,7 @@ export async function sendOwnerOrderNotification({
           <div style="
             margin: 24px 0;
             padding: 20px;
-            background-color: #f5f5f5;
+            background-color: #FAFAFA;
             border-radius: 8px;
           ">
             <h2 style="margin-top: 0;">
@@ -298,7 +302,7 @@ export async function sendOwnerOrderNotification({
           <div style="
             margin-top: 24px;
             padding: 20px;
-            border-top: 3px solid #B6F16A;
+            border-top: 3px solid #F6941D;
           ">
             <h2>Fulfillment</h2>
 
@@ -314,11 +318,14 @@ export async function sendOwnerOrderNotification({
         <div style="
           padding: 24px;
           text-align: center;
-          background-color: #142F42;
+          background-color: #C01B1C;
           color: white;
         ">
           <p style="margin: 0;">
-            Steal the Track, Deliver the Heat. 🍕
+            Steal the Track, Deliver the Heat.
+            <img 
+            
+            />
           </p>
         </div>
 
