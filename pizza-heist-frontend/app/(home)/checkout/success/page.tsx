@@ -5,7 +5,7 @@ import layoutStyles from "@/app/(home)/page.module.css";
 import { findPendingOrder } from "@/app/lib/gsheet";
 import ClearCart from "./clearCart";
 
-const stripe = new Stripe(process.env.STRIPE_TEST_SECRET_KEY!);
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 interface SuccessPageProps {
   searchParams: Promise<{

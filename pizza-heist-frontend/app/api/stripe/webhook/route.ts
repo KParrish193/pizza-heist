@@ -5,9 +5,12 @@ import {
   updatePendingOrder,
   addPaidOrder,
 } from "@/app/lib/gsheet";
-import { sendCustomerOrderConfirmation } from "@/app/lib/resend";
+import {
+  sendCustomerOrderConfirmation,
+  sendOwnerOrderNotification,
+} from "@/app/lib/resend";
 
-const stripe = new Stripe(process.env.STRIPE_TEST_SECRET_KEY!);
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export async function POST(req: Request) {
   const body = await req.text();
@@ -184,17 +187,18 @@ export async function POST(req: Request) {
           });
         }
 
-        console.log("Attempting customer confirmation email:", {
-          orderId,
-          email,
-          hasResendKey: !!process.env.RESEND_API_KEY,
-          fromEmail: process.env.RESEND_FROM_EMAIL,
-        });
-
         await sendCustomerOrderConfirmation({
           orderId,
           customerName: customer?.name || "",
           customerEmail: email,
+          orders: pendingOrders,
+        });
+
+        await sendOwnerOrderNotification({
+          orderId,
+          customerName: customer?.name || "",
+          customerEmail: email,
+          customerPhone: phone,
           orders: pendingOrders,
         });
 

@@ -8,7 +8,7 @@ import {
 } from "@/app/lib/gsheet";
 import { calculatePriceByTeam } from "@/app/lib/pricing";
 
-const stripe = new Stripe(process.env.STRIPE_TEST_SECRET_KEY!);
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export async function POST(req: Request) {
   try {
@@ -119,7 +119,7 @@ export async function POST(req: Request) {
      * Create Stripe Checkout session.
      */
     console.log("SITE URL:", process.env.NEXT_PUBLIC_SITE_URL);
-    
+
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       line_items: lineItems,
