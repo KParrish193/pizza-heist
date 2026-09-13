@@ -10,9 +10,10 @@ export interface PendingOrder {
   teamId: string;
   teamName: string;
   teamSlug: string;
-  color: string;
   size: string;
+  color: string;
   cut: string;
+  length: string;
   neckStyle: string;
   backStyle: string;
   printedName: string;
@@ -196,7 +197,7 @@ export async function addPendingOrder(
 
   await sheets.spreadsheets.values.append({
     spreadsheetId,
-    range: "PendingOrders!A:S",
+    range: "PendingOrders!A:T",
     valueInputOption: "USER_ENTERED",
     requestBody: {
       values: [[
@@ -206,9 +207,10 @@ export async function addPendingOrder(
         order.teamId,
         order.teamName,
         order.teamSlug,
-        order.color,
         order.size,
+        order.color,
         order.cut,
+        order.length,
         order.neckStyle,
         order.backStyle,
         order.printedName,
@@ -239,7 +241,7 @@ export async function findPendingOrder(
 
   const res = await sheets.spreadsheets.values.get({
     spreadsheetId,
-    range: "PendingOrders!A:S",
+    range: "PendingOrders!A:T",
   });
 
   const rows = res.data.values ?? [];
@@ -266,9 +268,10 @@ export async function findPendingOrder(
         teamId: obj["TeamId"],
         teamName: obj["TeamName"],
         teamSlug: obj["TeamSlug"],
-        color: obj["Color"],
         size: obj["Size"],
+        color: obj["Color"],
         cut: obj["Cut"],
+        length: obj["Length"],
         neckStyle: obj["NeckStyle"],
         backStyle: obj["BackStyle"],
         printedName: obj["PrintedName"],
@@ -303,7 +306,7 @@ export async function updatePendingOrder(
 
   const res = await sheets.spreadsheets.values.get({
     spreadsheetId,
-    range: "PendingOrders!A:S",
+    range: "PendingOrders!A:T",
   });
 
   const rows = res.data.values ?? [];
@@ -334,11 +337,11 @@ export async function updatePendingOrder(
       });
     }
 
-    // Status = column S
+    // Status = column T
     if (updates.status !== undefined) {
       await sheets.spreadsheets.values.update({
         spreadsheetId,
-        range: `PendingOrders!S${sheetRowNumber}`,
+        range: `PendingOrders!T${sheetRowNumber}`,
         valueInputOption: "USER_ENTERED",
         requestBody: {
           values: [[updates.status]],
@@ -372,7 +375,7 @@ export async function addPaidOrder(
 
   await sheets.spreadsheets.values.append({
     spreadsheetId,
-    range: `${team.tabName}!A:AD`,
+    range: `${team.tabName}!A:AE`,
     valueInputOption: "USER_ENTERED",
     requestBody: {
       values: [[
@@ -381,31 +384,32 @@ export async function addPaidOrder(
         order.orderId,                // C OrderId
         order.teamId,                 // D TeamId
         order.teamName,               // E TeamName
-        order.color,                  // F Color
-        order.size,                   // G Size
+        order.size,                   // F Size
+        order.color,                  // G Color
         order.cut,                    // H Cut
-        order.neckStyle,              // I NeckStyle
-        order.backStyle,              // J BackStyle
-        order.printedName,            // K PrintedName
-        order.printedNumber,          // L PrintedNumber
-        order.pronouns,               // M Pronouns
-        order.qty,                    // N Qty
-        order.itemPrice,              // O ItemPrice
-        order.discountType,           // P DiscountType
-        "Paid",                       // Q Status
-        order.shippingFormat,         // R ShippingFormat
-        paidData.shippingPrice,       // S ShippingPrice
-        paidData.taxCollected,        // T TaxCollected
-        paidData.billingFirstName,    // U BillingFirstName
-        paidData.billingLastName,     // V BillingLastName
-        paidData.email,               // W Email
-        paidData.phone,               // X Phone
-        paidData.shippingAddress1,    // Y ShippingAddress1
-        paidData.shippingAddress2,    // Z ShippingAddress2
-        paidData.shippingCity,        // AA ShippingCity
-        paidData.shippingState,       // AB ShippingState
-        paidData.shippingZip,         // AC ShippingZip
-        paidData.shippingCountry,     // AD ShippingCountry
+        order.length,                 // I Length
+        order.neckStyle,              // J NeckStyle
+        order.backStyle,              // K BackStyle
+        order.printedName,            // L PrintedName
+        order.printedNumber,          // M PrintedNumber
+        order.pronouns,               // N Pronouns
+        order.qty,                    // O Qty
+        order.itemPrice,              // P ItemPrice
+        order.discountType,           // Q DiscountType
+        "Paid",                       // R Status
+        order.shippingFormat,         // S ShippingFormat
+        paidData.shippingPrice,       // T ShippingPrice
+        paidData.taxCollected,        // U TaxCollected
+        paidData.billingFirstName,    // V BillingFirstName
+        paidData.billingLastName,     // W BillingLastName
+        paidData.email,               // X Email
+        paidData.phone,               // Y Phone
+        paidData.shippingAddress1,    // Z ShippingAddress1
+        paidData.shippingAddress2,    // AA ShippingAddress2
+        paidData.shippingCity,        // AB ShippingCity
+        paidData.shippingState,       // AC ShippingState
+        paidData.shippingZip,         // AD ShippingZip
+        paidData.shippingCountry,     // AE ShippingCountry
       ]],
     },
   });
