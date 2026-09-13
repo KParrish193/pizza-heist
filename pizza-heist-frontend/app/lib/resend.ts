@@ -73,9 +73,7 @@ export async function sendCustomerOrderConfirmation({
     }
 
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL!;
-    const logoUrl = `${siteUrl}/logos/horizontal-logo.png`;
-
-
+    const logoUrl = `${siteUrl}/logos/horizontal-fa.png`;
 
   const { data, error } = await resend.emails.send({
     from: fromEmail,
@@ -125,7 +123,8 @@ export async function sendCustomerOrderConfirmation({
         <p>
          <div style="
           text-align: center;
-          padding: 24px 0;">
+          padding: 24px 0;
+          background-color: #C01B1C">
           <img
             src="${logoUrl}"
             alt="Pizza Heist Jerseys"
