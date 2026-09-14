@@ -99,15 +99,16 @@ export default async function SuccessPage({
                   <h3><span>{index+1}.</span> {order.teamName}</h3>
                   <div className={styles.details}>
                     <p>
-                      <strong>Color:</strong> {order.color}
-                    </p>
-
-                    <p>
                       <strong>Size:</strong> {order.size}
                     </p>
-
+                    <p>
+                      <strong>Color:</strong> {order.color}
+                    </p>
                     <p>
                       <strong>Cut:</strong> {order.cut}
+                    </p>
+                    <p>
+                      <strong>Length:</strong> {order.length}
                     </p>
 
                     <p>

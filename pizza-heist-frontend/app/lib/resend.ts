@@ -191,10 +191,10 @@ export async function sendOwnerOrderNotification({
           <h3 style="margin-top: 0; color: #C01B1C;">
             ${order.teamName}
           </h3>
-
-          <p><strong>Color:</strong> ${order.color}</p>
           <p><strong>Size:</strong> ${order.size}</p>
-          <p><strong>Cut:</strong> ${order.cut}</p>
+          <p><strong>Color:</strong> ${order.color}</p>
+          <p><strong>Size:</strong> ${order.cut}</p>
+          <p><strong>Cut:</strong> ${order.length}</p>
           <p><strong>Neck:</strong> ${order.neckStyle}</p>
           <p><strong>Back:</strong> ${order.backStyle}</p>
           <p><strong>Name:</strong> ${order.printedName}</p>
@@ -216,7 +216,6 @@ export async function sendOwnerOrderNotification({
 
   const { data, error } = await resend.emails.send({
     from: process.env.RESEND_FROM_EMAIL!,
-    // to: "riotatchya@gmail.com",
     to: fromEmail,
     replyTo: customerEmail || undefined,
     subject: `New Pizza Heist Order #${orderId}`,

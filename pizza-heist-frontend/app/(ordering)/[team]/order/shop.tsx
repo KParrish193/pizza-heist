@@ -42,11 +42,11 @@ export default function Shop() {
   const price = calculatePriceByTeam(team);
 
   const [sizes, setSizes] = useState<string[]>([]);
+  const [colors, setColors] = useState<string[]>([]);
   const [cuts, setCuts] = useState<string[]>([]);
   const [lengths, setLengths] = useState<string[]>([]);
   const [neckStyles, setNeckStyles] = useState<string[]>([]);
   const [backStyles, setBackStyles] = useState<string[]>([]);
-  const [colors, setColors] = useState<string[]>([]);
   const [quantity, setQuantity] = useState(1);
 
   // ux state 
@@ -56,11 +56,11 @@ export default function Shop() {
   // initiate form state
   const [formData, setFormData] = useState<FormData>({
     size: "",
+    color: "",
     cut: "",
     length: "",
     neckStyle: "",
     backStyle: "",
-    color: "",
     jerseyName: "",
     jerseyNumber: "",
     pronouns: "",
@@ -68,11 +68,11 @@ export default function Shop() {
 
   const [formErrors, setFormErrors] = useState<FormErrors>({
     size: "",
+    color: "",
     cut: "",
     length: "",
     neckStyle: "",
     backStyle: "",
-    color: "",
     jerseyName: "",
     jerseyNumber: ""
   });
@@ -92,6 +92,10 @@ export default function Shop() {
         .map((row) => row["Size"])
         .filter(Boolean) as string[];
 
+      const filteredColors = data
+        .map((row) => row["Color"])
+        .filter(Boolean) as string[];
+      
       const filteredCuts = data
         .map((row) => row["Cut"])
         .filter(Boolean) as string[];
@@ -108,16 +112,13 @@ export default function Shop() {
         .map((row) => row["BackStyle"])
         .filter(Boolean) as string[];
       
-      const filteredColors = data
-        .map((row) => row["Color"])
-        .filter(Boolean) as string[];
-      
       setSizes(filteredSizes);
+      setColors(filteredColors);
       setCuts(filteredCuts);
       setLengths(filteredLengths);
       setNeckStyles(filteredNeck);
       setBackStyles(filteredBack);
-      setColors(filteredColors);
+
 
     }
     loadOptions();
@@ -231,11 +232,11 @@ export default function Shop() {
       // Reset form
       setFormData({
         size: "",
+        color: "",
         cut: "",
         length: "",
         neckStyle: "",
         backStyle: "",
-        color: "",
         jerseyName: "",
         jerseyNumber: "",
         pronouns: "",
@@ -245,11 +246,11 @@ export default function Shop() {
 
       setFormErrors({
         size: "",
+        color: "",
         cut: "",
         length: "",
         neckStyle: "",
         backStyle: "",
-        color: "",
         jerseyName: "",
         jerseyNumber: "",
       });
