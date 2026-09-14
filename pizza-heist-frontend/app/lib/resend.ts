@@ -28,15 +28,20 @@ export async function sendCustomerOrderConfirmation({
           <h3 style="margin-bottom: 8px;">
             ${order.teamName}
           </h3>
-
-          <p style="margin: 4px 0;">
-            <strong>Color:</strong> ${order.color}
-          </p>
           <p style="margin: 4px 0;">
             <strong>Size:</strong> ${order.size}
           </p>
           <p style="margin: 4px 0;">
+            <strong>Color:</strong> ${order.color}
+          </p>
+          <p style="margin: 4px 0;">
             <strong>Cut:</strong> ${order.cut}
+          </p>
+          <p style="margin: 4px 0;">
+            <strong>Size:</strong> ${order.length}
+          </p>
+          <p style="margin: 4px 0;">
+            <strong>Size:</strong> ${order.size}
           </p>
           <p style="margin: 4px 0;">
             <strong>Neck:</strong> ${order.neckStyle}
