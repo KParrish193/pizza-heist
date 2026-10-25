@@ -299,6 +299,10 @@
   width: 100%;
 }
 
+.hasAlt {
+    grid-template-columns: repeat(3, 1fr);
+}
+
 .toggleOption {
   cursor: pointer;
 }

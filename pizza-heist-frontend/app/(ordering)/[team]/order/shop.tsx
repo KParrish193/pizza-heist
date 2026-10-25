@@ -40,9 +40,9 @@ export default function Shop() {
   const { addItem } = useCart();
   const { team } = useTeam();
   const price = calculatePriceByTeam(team);
+  const colors = team.jerseyColors;
 
   const [sizes, setSizes] = useState<string[]>([]);
-  const [colors, setColors] = useState<string[]>([]);
   const [cuts, setCuts] = useState<string[]>([]);
   const [lengths, setLengths] = useState<string[]>([]);
   const [neckStyles, setNeckStyles] = useState<string[]>([]);
@@ -91,10 +91,6 @@ export default function Shop() {
       const filteredSizes = data
         .map((row) => row["Size"])
         .filter(Boolean) as string[];
-
-      const filteredColors = data
-        .map((row) => row["Color"])
-        .filter(Boolean) as string[];
       
       const filteredCuts = data
         .map((row) => row["Cut"])
@@ -113,7 +109,6 @@ export default function Shop() {
         .filter(Boolean) as string[];
       
       setSizes(filteredSizes);
-      setColors(filteredColors);
       setCuts(filteredCuts);
       setLengths(filteredLengths);
       setNeckStyles(filteredNeck);
@@ -330,7 +325,7 @@ export default function Shop() {
 
   const frontImage = getFrontImage();
   const backImage = getBackImage();
-  
+
   return (
     <div className={styles.page}>
       <main className={styles.main}>
@@ -494,21 +489,22 @@ export default function Shop() {
               <div className={styles.formRow}>
                 <fieldset className={styles.fieldset}>
                   <legend>Color</legend>
-                  <div className={styles.toggleGroup}>
-                    {colors.map((color, i: number) => {
+                  
+                  <div className={`${styles.toggleGroup} ${colors.length > 2 ? styles.hasAlt : "" }`}>
+                    {colors.map((color) => {
                       return (
-                        <label key={i} className={styles.toggleOption}>
+                        <label key={color.type} className={styles.toggleOption}>
                           <input
                             type="radio"
                             name="color"
-                            value={color}
-                            checked={formData.color === color}
+                            value={color.name}
+                            checked={formData.color === color.name}
                             onChange={handleChange}
                             onBlur={handleBlur}
                             required
                           />
 
-                          <span>{color}</span>
+                          <span>{color.name}</span>
                         </label>
                       );
                     })}

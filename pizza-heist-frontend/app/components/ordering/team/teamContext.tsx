@@ -6,6 +6,10 @@ export interface Team {
   slug: string;
   id: string;
   name: string;
+  jerseyColors: {
+    type: "light" | "dark" | "alternate";
+    name: string;
+  }[];
   basePrice: number;
   discountPercentage: number;
   salePrice: number;

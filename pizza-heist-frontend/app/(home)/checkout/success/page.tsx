@@ -110,23 +110,18 @@ export default async function SuccessPage({
                     <p>
                       <strong>Length:</strong> {order.length}
                     </p>
-
                     <p>
                       <strong>Neck:</strong> {order.neckStyle}
                     </p>
-
                     <p>
                       <strong>Back:</strong> {order.backStyle}
                     </p>
-
                     <p>
                       <strong>Name:</strong> {order.printedName}
                     </p>
-
                     <p>
                       <strong>Number:</strong> {order.printedNumber}
                     </p>
-
                     <p>
                       <strong>Pronouns:</strong> {order.pronouns}
                     </p>
@@ -144,7 +139,7 @@ export default async function SuccessPage({
           <ClearCart />
           </div>
           
-          {/* TODO: Send this to last team store not home page */}
+          {/* TODO: Send this to last visited team store */}
           <Link href="/treasure-valley/order" className="button-primary">
             Return to Shop
           </Link>

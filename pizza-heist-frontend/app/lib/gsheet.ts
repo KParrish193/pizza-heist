@@ -124,7 +124,7 @@ export async function fetchSheetData(
 export async function fetchTeamBySlug(
   slug: string
 ): Promise<Team | null> {
-  const rows = await fetchSheetData("TeamConfigs", "B:N");
+  const rows = await fetchSheetData("TeamConfigs", "B:R");
 
   const row = rows.find(
     (team) => team["Slug"]?.toLowerCase() === slug.toLowerCase()
@@ -139,6 +139,20 @@ export async function fetchTeamBySlug(
     id: row["Team Id"],
     name: row["Team Name"],
     basePrice: Number(row["Base Price"]),
+    jerseyColors: [
+      {
+        type: "light" as const,
+        name: row["Light Color"] || "",
+      },
+      {
+        type: "dark" as const,
+        name: row["Dark Color"] || "",
+      },
+      {
+        type: "alternate" as const,
+        name: row["Alternate Color"] || "",
+      },
+    ].filter((color) => color.name.trim() !== ""),
     discountPercentage: Number(row["Discount Percentage"] || 0),
     salePrice: Number(row["Sale Price"] || 0),
     pricingType: row["Pricing Type"],
@@ -156,7 +170,7 @@ export async function fetchTeamBySlug(
 export async function fetchTeamById(
   id: string
 ): Promise<Team | null> {
-  const rows = await fetchSheetData("TeamConfigs", "B:N");
+  const rows = await fetchSheetData("TeamConfigs", "B:R");
 
   const row = rows.find(
     (team) => team["Team Id"]?.toLowerCase() === id.toLowerCase()
@@ -171,6 +185,20 @@ export async function fetchTeamById(
     id: row["Team Id"],
     name: row["Team Name"],
     basePrice: Number(row["Base Price"]),
+    jerseyColors: [
+      {
+        type: "light" as const,
+        name: row["Light Color"] || "",
+      },
+      {
+        type: "dark" as const,
+        name: row["Dark Color"] || "",
+      },
+      {
+        type: "alternate" as const,
+        name: row["Alternate Color"] || "",
+      },
+    ].filter((color) => color.name.trim() !== ""),
     discountPercentage: Number(row["Discount Percentage"] || 0),
     salePrice: Number(row["Sale Price"] || 0),
     pricingType: row["Pricing Type"],
